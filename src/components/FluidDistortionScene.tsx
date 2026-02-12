@@ -42,29 +42,25 @@ varying vec2 vUv;
 varying float vElevation;
 uniform float uTime;
 
-  // COSMIC OIL PALETTE (High Visibility & Color)
-  vec3 deepBlue = vec3(0.02, 0.05, 0.1);
-  vec3 cyan = vec3(0.2, 0.6, 0.8);
-  vec3 violet = vec3(0.4, 0.2, 0.8);
-  vec3 white = vec3(1.0);
+  // COSMIC COLORS
+  vec3 deepBlue = vec3(0.0, 0.05, 0.2);
+  vec3 cyan = vec3(0.0, 0.8, 0.9);
+  vec3 violet = vec3(0.5, 0.0, 0.8);
 
-  // Dynamic mixing based on elevation and time
-  float mixStrength = smoothstep(-0.2, 0.5, vElevation);
+  // Mix based on elevation
+  float mixLevel = smoothstep(-0.2, 0.5, vElevation);
   
-  // Base flow (Deep Blue Void)
-  vec3 colorA = mix(deepBlue, vec3(0.0), sin(vUv.x * 3.0 + uTime) * 0.2);
+  // Base color
+  vec3 baseColor = mix(deepBlue, cyan, mixLevel);
   
-  // Ripple Colors (Cyan & Violet mixture)
-  vec3 rippleColor = mix(cyan, violet, sin(vElevation * 5.0 + uTime));
-  vec3 colorB = mix(colorA, rippleColor, mixStrength);
+  // Add violet highlights
+  baseColor = mix(baseColor, violet, sin(vElevation * 10.0 + uTime) * 0.5 + 0.5);
   
-  // Strong Highlights (White)
-  vec3 finalColor = mix(colorB, white, smoothstep(0.4, 0.6, vElevation));
-  
-  // Iridescent shimmer
-  finalColor += vec3(0.1) * sin(vElevation * 20.0 + uTime * 5.0);
+  // Add white sparkles/highlights
+  float highlight = smoothstep(0.4, 0.5, vElevation);
+  baseColor += vec3(highlight);
 
-  gl_FragColor = vec4(finalColor, 1.0);
+  gl_FragColor = vec4(baseColor, 1.0);
 }
 `;
 
