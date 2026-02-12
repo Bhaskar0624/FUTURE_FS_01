@@ -42,23 +42,24 @@ varying vec2 vUv;
 varying float vElevation;
 uniform float uTime;
 
-  // MONOCHROME PALETTE (Shoya Style)
-  vec3 black = vec3(0.0);
+  // MERCURY / SILVER PALETTE (High Visibility)
+  vec3 black = vec3(0.05);
+  vec3 darkGray = vec3(0.2);
+  vec3 silver = vec3(0.8);
   vec3 white = vec3(1.0);
-  vec3 gray = vec3(0.5);
 
   // Dynamic mixing based on elevation and time
   float mixStrength = smoothstep(-0.2, 0.5, vElevation);
   
-  // Base flow (Dark, smooth liquid)
-  vec3 colorA = mix(black, vec3(0.1), sin(vUv.x * 3.0 + uTime) * 0.2);
-  vec3 colorB = mix(colorA, gray, mixStrength * 0.5);
+  // Base flow (Dark Gray -> Silver)
+  vec3 colorA = mix(black, darkGray, sin(vUv.x * 3.0 + uTime) * 0.2);
+  vec3 colorB = mix(colorA, silver, mixStrength);
   
-  // Highlights (White reflections)
+  // Strong Highlights (White)
   vec3 finalColor = mix(colorB, white, smoothstep(0.4, 0.6, vElevation));
   
-  // Metallic shimmer
-  finalColor += vec3(0.05) * sin(vElevation * 20.0 + uTime * 5.0);
+  // Metallic shimmer (Increased intensity)
+  finalColor += vec3(0.15) * sin(vElevation * 20.0 + uTime * 5.0);
 
   gl_FragColor = vec4(finalColor, 1.0);
 }
