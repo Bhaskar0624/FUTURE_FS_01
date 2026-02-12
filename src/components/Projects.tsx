@@ -86,32 +86,34 @@ export default function Projects({ projects }: { projects: any[] }) {
   // Use passed projects or fallback to empty array
   const displayProjects = projects && projects.length > 0 ? projects : [];
 
-  if (displayProjects.length === 0) {
-    return null; // Don't render section if no projects
-  }
+  console.log('Projects component received:', projects); // Debug log
 
   return (
     <section id="projects" className="relative py-32">
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeader label="// portfolio" title="Featured Projects" />
 
-        <div className="grid gap-8 sm:grid-cols-2">
-          {displayProjects.map((project, i) => (
-            <ProjectCard
-              key={project.id || i}
-              project={{
-                title: project.title,
-                desc: project.description,
-                tags: project.tags || [],
-                category: project.category || "Web",
-                image: project.image_url || null,
-                github: project.github_url || "#",
-                live: project.live_url || "#"
-              }}
-              index={i}
-            />
-          ))}
-        </div>
+        {displayProjects.length === 0 ? (
+          <p className="text-center text-[var(--ash)]">No projects to display yet.</p>
+        ) : (
+          <div className="grid gap-8 sm:grid-cols-2">
+            {displayProjects.map((project, i) => (
+              <ProjectCard
+                key={project.id || i}
+                project={{
+                  title: project.title,
+                  desc: project.description,
+                  tags: project.tags || [],
+                  category: project.category || "Web",
+                  image: project.image_url || null,
+                  github: project.github_url || "#",
+                  live: project.live_url || "#"
+                }}
+                index={i}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
