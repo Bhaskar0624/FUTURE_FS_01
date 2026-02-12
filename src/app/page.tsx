@@ -13,9 +13,10 @@ export const revalidate = 0; // Disable cache to see updates immediately
 
 async function fetchData() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-    const res = await fetch(`${baseUrl}/api/data`, {
-      cache: 'no-store'
+    // Use relative URL so it works on both localhost and Vercel
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/api/data`, {
+      cache: 'no-store',
+      next: { revalidate: 0 }
     });
     if (!res.ok) {
       console.error("Failed to fetch data:", res.status);
