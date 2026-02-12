@@ -42,27 +42,25 @@ varying vec2 vUv;
 varying float vElevation;
 uniform float uTime;
 
-void main() {
-  // Premium Palette
-  vec3 gold = vec3(0.957, 0.816, 0.247);    // #F4D03F
-  vec3 emerald = vec3(0.02, 0.588, 0.412);  // #059669
-  vec3 coral = vec3(1.0, 0.42, 0.42);       // #FF6B6B
-  vec3 black = vec3(0.02, 0.02, 0.02);
+  // MONOCHROME PALETTE (Shoya Style)
+  vec3 black = vec3(0.0);
+  vec3 white = vec3(1.0);
+  vec3 gray = vec3(0.5);
 
   // Dynamic mixing based on elevation and time
   float mixStrength = smoothstep(-0.2, 0.5, vElevation);
   
-  // Base flow
-  vec3 colorA = mix(black, emerald, sin(vUv.x * 3.0 + uTime) * 0.2);
-  vec3 colorB = mix(colorA, gold, mixStrength);
+  // Base flow (Dark, smooth liquid)
+  vec3 colorA = mix(black, vec3(0.1), sin(vUv.x * 3.0 + uTime) * 0.2);
+  vec3 colorB = mix(colorA, gray, mixStrength * 0.5);
   
-  // Highlights
-  vec3 finalColor = mix(colorB, coral, smoothstep(0.4, 0.6, vElevation));
+  // Highlights (White reflections)
+  vec3 finalColor = mix(colorB, white, smoothstep(0.4, 0.6, vElevation));
   
-  // "Oil Slick" chromatic effect
+  // Metallic shimmer
   finalColor += vec3(0.05) * sin(vElevation * 20.0 + uTime * 5.0);
 
-  gl_FragColor = vec4(finalColor, 0.9);
+  gl_FragColor = vec4(finalColor, 1.0);
 }
 `;
 

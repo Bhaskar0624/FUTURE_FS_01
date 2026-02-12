@@ -47,110 +47,49 @@
 :root {
   --radius: 0.625rem;
 
-  /* Premium Innovative Color Palette */
-  /* Primary: Champagne Gold - Luxurious, warm, sophisticated */
-  --gold: #F4D03F;
-  /* Vibrant champagne gold */
-  --gold-light: #F9E79F;
-  /* Light champagne */
-  --gold-dark: #D4AF37;
-  /* Rich antique gold */
-  --gold-glow: #FFE55C;
-  /* Bright gold for glows */
+  /* SHOYA STYLE: MONOCHROME PALETTE */
+  /* Strict Black & White */
+  --background: #000000;
+  --foreground: #ffffff;
 
-  /* Accent: Deep Emerald - Rich, premium, natural */
-  --emerald: #059669;
-  /* Deep emerald green */
-  --emerald-light: #10B981;
-  /* Bright emerald */
-  --emerald-dark: #047857;
-  /* Dark forest green */
+  --gold: #ffffff;
+  /* Re-mapping gold to white for compatibility */
+  --emerald: #ffffff;
+  /* Re-mapping emerald to white */
+  --coral: #ffffff;
+  /* Re-mapping coral to white */
+  --amber: #ffffff;
+  /* Re-mapping amber to white */
 
-  /* Accent: Coral Sunset - Warm, energetic, premium */
-  --coral: #FF6B6B;
-  /* Vibrant coral */
-  --coral-light: #FF8787;
-  /* Light coral */
-  --coral-dark: #EE5A52;
-  /* Deep coral */
+  --carbon: #000000;
+  --carbon-light: #111111;
+  --ash: #888888;
+  --beige: #ffffff;
+  --sage: #ffffff;
 
-  /* Accent: Amber - Warm, inviting, premium */
-  --amber: #F59E0B;
-  /* Rich amber */
-  --amber-light: #FBBF24;
-  /* Bright amber */
+  /* Border/Input */
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.1);
+  --ring: #ffffff;
 
-  /* Neutrals: Rich Blacks & Warm Grays */
-  --background: #0a0a0a;
-  /* Pure deep black */
-  --carbon: #0a0a0a;
-  --carbon-light: #1a1a1a;
-  /* Rich charcoal */
-  --carbon-lighter: #2a2a2a;
-  /* Warm dark gray */
-  --surface: #1a1a1a;
-  /* Card background */
+  /* Chart Colors (Grayscale) */
+  --chart-1: #ffffff;
+  --chart-2: #cccccc;
+  --chart-3: #999999;
+  --chart-4: #666666;
+  --chart-5: #333333;
 
-  /* Text Colors */
-  --text-primary: #FAFAFA;
-  /* Warm white */
-  --text-secondary: #D4D4D8;
-  /* Light gray */
-  --text-muted: #A1A1AA;
-  /* Muted gray */
+  /* Sidebar */
+  --sidebar: #050505;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #ffffff;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #111111;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #222222;
+  --sidebar-ring: #ffffff;
 
-  /* Semantic Colors */
-  --card: #1a1a1a;
-  --card-foreground: #FAFAFA;
-  --popover: #1a1a1a;
-  --popover-foreground: #FAFAFA;
-  --primary: #F4D03F;
-  /* Champagne gold */
-  --primary-foreground: #0a0a0a;
-  --secondary: #2a2a2a;
-  --secondary-foreground: #FAFAFA;
-  --muted: #2a2a2a;
-  --muted-foreground: #A1A1AA;
-  --accent: #059669;
-  /* Emerald */
-  --accent-foreground: #FAFAFA;
-  --destructive: #EE5A52;
-  /* Coral */
-  --border: rgba(244, 208, 63, 0.15);
-  --input: rgba(244, 208, 63, 0.2);
-  --ring: #F4D03F;
-
-  /* Chart Colors */
-  --chart-1: #F4D03F;
-  /* Gold */
-  --chart-2: #059669;
-  /* Emerald */
-  --chart-3: #FF6B6B;
-  /* Coral */
-  --chart-4: #F59E0B;
-  /* Amber */
-  --chart-5: #A1A1AA;
-  /* Gray */
-
-  /* Sidebar Colors */
-  --sidebar: #0e0e0e;
-  --sidebar-foreground: #FAFAFA;
-  --sidebar-primary: #F4D03F;
-  --sidebar-primary-foreground: #0a0a0a;
-  --sidebar-accent: #2a2a2a;
-  --sidebar-accent-foreground: #FAFAFA;
-  --sidebar-border: rgba(244, 208, 63, 0.12);
-  --sidebar-ring: #F4D03F;
-
-  /* Legacy compatibility */
-  --beige: #FAFAFA;
-  --beige-dark: #D4D4D8;
-  --ash: #A1A1AA;
-  --sage: #059669;
-  /* Now emerald */
-  --sage-light: #10B981;
-
-  /* Premium font stack */
+  /* Premium font stack - Keeping Inter/Space Grotesk as they fit the style */
   --font-heading: 'Space Grotesk', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
 }
