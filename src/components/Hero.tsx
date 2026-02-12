@@ -72,10 +72,9 @@ export default function Hero({ profile }: { profile: any }) {
           <MagneticButton>
             <a
               href="#projects"
-              className="group relative overflow-hidden rounded-full bg-[var(--gold)] px-8 py-3 font-mono text-xs uppercase tracking-widest text-[var(--carbon)] transition-all hover:shadow-[0_0_40px_rgba(244,208,63,0.5)] hover:scale-105"
+              className="relative overflow-hidden rounded-full bg-[var(--gold)] px-8 py-3 font-mono text-xs uppercase tracking-widest text-[var(--carbon)] transition-all hover:shadow-[0_0_40px_rgba(244,208,63,0.5)] hover:scale-105 hover:bg-[var(--gold-light)]"
             >
               <span className="relative z-10">Explore My Work</span>
-              <div className="absolute inset-0 -translate-x-full bg-[var(--gold-light)] transition-transform group-hover:translate-x-0" />
             </a>
           </MagneticButton>
           {profile?.resume_url ? (
