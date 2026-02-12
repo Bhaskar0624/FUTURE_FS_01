@@ -7,45 +7,53 @@ import Experience from "@/components/Experience";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import CursorWrapper from "@/components/CursorWrapper";
+import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic'; // Force dynamic rendering
 export const revalidate = 0; // Disable cache to see updates immediately
 
 async function fetchData() {
   try {
-    // On Vercel, use VERCEL_URL. Locally, use localhost
-    const protocol = process.env.VERCEL_URL ? 'https://' : 'http://';
-    const host = process.env.VERCEL_URL || 'localhost:3000';
-    const url = `${protocol}${host}/api/data`;
+    // Direct Supabase connection instead of HTTP fetch
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
 
-    console.log('Fetching from:', url); // Debug log
+    const [profileRes, projectsRes, experiencesRes, skillsRes, certificatesRes] = await Promise.all([
+      supabase.from('profile').select('*').limit(1).single(),
+      supabase.from('projects').select('*').order('sort_order'),
+      supabase.from('experiences').select('*').order('sort_order'),
+      supabase.from('skills').select('*').order('sort_order'),
+      supabase.from('certificates').select('*').order('sort_order')
+    ]);
 
-    const res = await fetch(url, {
-      cache: 'no-store',
-      next: { revalidate: 0 }
-    });
-
-    if (!res.ok) {
-      console.error("Failed to fetch data:", res.status);
-      return null;
-    }
-
-    const data = await res.json();
-    console.log('Fetched data:', data); // Debug log
-    return data;
+    return {
+      profile: profileRes.data || {},
+      projects: projectsRes.data || [],
+      experiences: experiencesRes.data || [],
+      skills: skillsRes.data || [],
+      certificates: certificatesRes.data || []
+    };
   } catch (error) {
     console.error("Error fetching data:", error);
-    return null;
+    return {
+      profile: {},
+      projects: [],
+      experiences: [],
+      skills: [],
+      certificates: []
+    };
   }
 }
 
 export default async function Home() {
   const data = await fetchData();
-  const profile = data?.profile || {};
-  const projects = data?.projects || [];
-  const experiences = data?.experiences || [];
-  const skills = data?.skills || [];
-  const certificates = data?.certificates || [];
+  const profile = data.profile || {};
+  const projects = data.projects || [];
+  const experiences = data.experiences || [];
+  const skills = data.skills || [];
+  const certificates = data.certificates || [];
 
   return (
     <>
