@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Save, LogOut, Plus, Trash2, Eye } from "lucide-react";
 
-type Tab = "profile" | "projects" | "experiences" | "skills" | "certificates";
+type Tab = "profile" | "projects" | "experiences" | "skills" | "certificates" | "journey";
 
 export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -20,6 +20,7 @@ export default function AdminPage() {
   const [experiences, setExperiences] = useState<any[]>([]);
   const [skills, setSkills] = useState<any[]>([]);
   const [certificates, setCertificates] = useState<any[]>([]);
+  const [journey, setJourney] = useState<any[]>([]);
 
   const showMessage = (msg: string) => {
     setMessage(msg);
@@ -51,6 +52,7 @@ export default function AdminPage() {
         if (data.experiences) setExperiences(data.experiences);
         if (data.skills) setSkills(data.skills);
         if (data.certificates) setCertificates(data.certificates);
+        if (data.journey) setJourney(data.journey);
       }
     } catch (e) {
       console.error("Error loading data:", e);
@@ -183,13 +185,16 @@ export default function AdminPage() {
     await saveData("certificates", updated);
   };
 
-  // Note: deleteCertificate and saveCertificate logic was inline in the previous code for Certificates tab!
-  // I need to make sure I define them here so I can use them in the render loop, 
-  // OR I update the render loop to use these new functions.
-  // The previous code had `saveSkill` etc defined, but `saveCertificate` was inline in the JSX?
-  // checking original code...
-  // Ah, certificates tab had inline async functions in the JSX. 
-  // I should probably define helpers here to be cleaner.
+  const saveJourney = async (item: any) => {
+    await saveData("journey", journey);
+  };
+
+  const deleteJourney = async (id: string) => {
+    if (!confirm("Are you sure?")) return;
+    const updated = journey.filter(j => j.id !== id);
+    setJourney(updated);
+    await saveData("journey", updated);
+  };
 
   // Login screen
   if (!authenticated) {
@@ -226,6 +231,7 @@ export default function AdminPage() {
     { key: "experiences", label: "Experience" },
     { key: "skills", label: "Skills" },
     { key: "certificates", label: "Certificates" },
+    { key: "journey", label: "Journey" },
   ];
 
   const profileFields = [
@@ -701,6 +707,77 @@ export default function AdminPage() {
                   {cert.id && (
                     <button
                       onClick={() => deleteCertificate(cert.id)}
+                      className="flex items-center gap-1.5 rounded-lg border border-red-500/20 px-4 py-2 font-mono text-xs text-red-400 hover:bg-red-500/10"
+                    >
+                      <Trash2 size={12} /> Delete
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Journey Tab */}
+        {activeTab === "journey" && (
+          <div className="space-y-4">
+            <button
+              onClick={() => setJourney([...journey, { year: "", title: "", description: "", sort_order: journey.length }])}
+              className="flex items-center gap-2 rounded-lg border border-dashed border-[var(--gold)]/20 px-4 py-2 font-mono text-xs text-[var(--gold)] transition-all hover:border-[var(--gold)]/40"
+            >
+              <Plus size={14} /> Add Journey Item
+            </button>
+            {journey.map((item, idx) => (
+              <div key={item.id || idx} className="glass rounded-2xl p-6">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-1 block font-mono text-[10px] uppercase tracking-widest text-[var(--ash)]">Year</label>
+                    <input
+                      value={item.year}
+                      onChange={(e) => {
+                        const updated = [...journey];
+                        updated[idx] = { ...updated[idx], year: e.target.value };
+                        setJourney(updated);
+                      }}
+                      className="w-full rounded-lg border border-[var(--gold)]/10 bg-[var(--carbon)] px-3 py-2 text-sm text-[var(--beige)] outline-none focus:border-[var(--gold)]/40"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block font-mono text-[10px] uppercase tracking-widest text-[var(--ash)]">Title</label>
+                    <input
+                      value={item.title}
+                      onChange={(e) => {
+                        const updated = [...journey];
+                        updated[idx] = { ...updated[idx], title: e.target.value };
+                        setJourney(updated);
+                      }}
+                      className="w-full rounded-lg border border-[var(--gold)]/10 bg-[var(--carbon)] px-3 py-2 text-sm text-[var(--beige)] outline-none focus:border-[var(--gold)]/40"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="mb-1 block font-mono text-[10px] uppercase tracking-widest text-[var(--ash)]">Description</label>
+                    <textarea
+                      rows={3}
+                      value={item.description || ""}
+                      onChange={(e) => {
+                        const updated = [...journey];
+                        updated[idx] = { ...updated[idx], description: e.target.value };
+                        setJourney(updated);
+                      }}
+                      className="w-full resize-none rounded-lg border border-[var(--gold)]/10 bg-[var(--carbon)] px-3 py-2 text-sm text-[var(--beige)] outline-none focus:border-[var(--gold)]/40"
+                    />
+                  </div>
+                </div>
+                <div className="mt-4 flex gap-2">
+                  <button
+                    onClick={() => saveJourney(item)}
+                    className="flex items-center gap-1.5 rounded-lg bg-[var(--gold)] px-4 py-2 font-mono text-xs text-[var(--carbon)]"
+                  >
+                    <Save size={12} /> Save
+                  </button>
+                  {item.id && (
+                    <button
+                      onClick={() => deleteJourney(item.id)}
                       className="flex items-center gap-1.5 rounded-lg border border-red-500/20 px-4 py-2 font-mono text-xs text-red-400 hover:bg-red-500/10"
                     >
                       <Trash2 size={12} /> Delete

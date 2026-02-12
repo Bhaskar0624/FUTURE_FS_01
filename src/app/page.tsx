@@ -20,12 +20,13 @@ async function fetchData() {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
 
-    const [profileRes, projectsRes, experiencesRes, skillsRes, certificatesRes] = await Promise.all([
+    const [profileRes, projectsRes, experiencesRes, skillsRes, certificatesRes, journeyRes] = await Promise.all([
       supabase.from('profile').select('*').limit(1).single(),
       supabase.from('projects').select('*').order('sort_order'),
       supabase.from('experiences').select('*').order('sort_order'),
       supabase.from('skills').select('*').order('sort_order'),
-      supabase.from('certificates').select('*').order('sort_order')
+      supabase.from('certificates').select('*').order('sort_order'),
+      supabase.from('journey').select('*').order('sort_order')
     ]);
 
     return {
@@ -33,7 +34,8 @@ async function fetchData() {
       projects: projectsRes.data || [],
       experiences: experiencesRes.data || [],
       skills: skillsRes.data || [],
-      certificates: certificatesRes.data || []
+      certificates: certificatesRes.data || [],
+      journey: journeyRes.data || []
     };
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -54,6 +56,7 @@ export default async function Home() {
   const experiences = data.experiences || [];
   const skills = data.skills || [];
   const certificates = data.certificates || [];
+  const journey = data.journey || [];
 
   return (
     <>
@@ -62,7 +65,7 @@ export default async function Home() {
       <main className="relative">
         <Hero profile={profile} />
         <div className="noise relative">
-          <About profile={profile} />
+          <About profile={profile} journey={journey} />
           <Skills skills={skills} />
           <Projects projects={projects} />
           <Experience experiences={experiences} />

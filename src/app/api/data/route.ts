@@ -9,12 +9,13 @@ export async function GET(request: Request) {
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     try {
-        const [profileRes, projectsRes, experiencesRes, skillsRes, certsRes] = await Promise.all([
+        const [profileRes, projectsRes, experiencesRes, skillsRes, certsRes, journeyRes] = await Promise.all([
             supabase.from("profile").select("*").limit(1).single(),
             supabase.from("projects").select("*").order("sort_order"),
             supabase.from("experiences").select("*").order("sort_order"),
             supabase.from("skills").select("*").order("sort_order"),
             supabase.from("certificates").select("*").order("sort_order"),
+            supabase.from("journey").select("*").order("sort_order"),
         ]);
 
         return NextResponse.json({
@@ -22,7 +23,8 @@ export async function GET(request: Request) {
             projects: projectsRes.data || [],
             experiences: experiencesRes.data || [],
             skills: skillsRes.data || [],
-            certificates: certsRes.data || []
+            certificates: certsRes.data || [],
+            journey: journeyRes.data || []
         });
     } catch (error) {
         console.error("Error fetching data:", error);

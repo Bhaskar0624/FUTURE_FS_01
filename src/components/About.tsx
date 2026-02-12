@@ -4,25 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import SectionHeader from "./SectionHeader";
 
-const timeline = [
-  {
-    year: "2024",
-    title: "Vibecoding & AI Engineering",
-    desc: "Diving deep into AI-powered development — building intelligent systems, prompt engineering, and creative AI tooling.",
-  },
-  {
-    year: "2023",
-    title: "Full-Stack Development",
-    desc: "Building production-grade web applications with Next.js, React, Node.js, and cloud infrastructure.",
-  },
-  {
-    year: "2022",
-    title: "Started Coding Journey",
-    desc: "Began learning programming fundamentals, web development basics, and the art of problem-solving through code.",
-  },
-];
-
-function TimelineItem({ item, index }: { item: typeof timeline[0]; index: number }) {
+function TimelineItem({ item, index }: { item: any; index: number }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
@@ -44,18 +26,21 @@ function TimelineItem({ item, index }: { item: typeof timeline[0]; index: number
       {/* Content */}
       <div className="glass rounded-2xl p-6 flex-1">
         <h3 className="mb-2 text-lg font-medium text-[var(--beige)]">{item.title}</h3>
-        <p className="text-sm leading-relaxed text-[var(--ash)]">{item.desc}</p>
+        <p className="text-sm leading-relaxed text-[var(--ash)]">{item.description || item.desc}</p>
       </div>
     </motion.div>
   );
 }
 
-export default function About({ profile }: { profile: any }) {
+export default function About({ profile, journey }: { profile: any; journey: any[] }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   const name = profile?.name || "Bhaskar";
   const bio = profile?.bio || "I'm a developer, AI engineer student, and vibecoder who believes technology should feel alive. I craft digital experiences that merge engineering precision with creative vision, building at the intersection of code and artificial intelligence.";
+
+  // Use database journey or fallback to empty array
+  const timeline = journey && journey.length > 0 ? journey : [];
 
   return (
     <section id="about" className="relative py-32">
@@ -76,11 +61,15 @@ export default function About({ profile }: { profile: any }) {
         </motion.div>
 
         {/* Timeline */}
-        <div className="flex flex-col gap-8">
-          {timeline.map((item, i) => (
-            <TimelineItem key={item.year} item={item} index={i} />
-          ))}
-        </div>
+        {timeline.length > 0 ? (
+          <div className="flex flex-col gap-8">
+            {timeline.map((item, i) => (
+              <TimelineItem key={item.id || i} item={item} index={i} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-[var(--ash)]">No journey timeline yet.</p>
+        )}
       </div>
     </section>
   );
