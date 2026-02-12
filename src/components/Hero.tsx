@@ -16,6 +16,9 @@ export default function Hero({ profile }: { profile: any }) {
       {/* 3D Scene */}
       <HeroScene />
 
+      {/* Animated gradient mesh background */}
+      <div className="pointer-events-none absolute inset-0 gradient-mesh" />
+
       {/* Grid overlay */}
       <div className="pointer-events-none absolute inset-0 grid-bg opacity-40" />
 
@@ -45,7 +48,7 @@ export default function Hero({ profile }: { profile: any }) {
           className="mb-6 text-5xl font-light leading-tight tracking-tight sm:text-7xl md:text-8xl"
         >
           <span className="block text-[var(--beige)]">Hi, I&apos;m</span>
-          <span className="block text-gradient-gold font-medium">{name}</span>
+          <span className="block text-gradient-animated font-medium">{name}</span>
         </motion.h1>
 
         {/* Subtitle */}
