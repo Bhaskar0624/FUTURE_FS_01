@@ -3,28 +3,30 @@
 import { motion } from "framer-motion";
 
 export default function Footer({ profile }: { profile: any }) {
-  return (
-    <footer className="border-t border-[var(--gold)]/5 py-12 transition-colors duration-300 hover:border-[var(--gold)]/20">
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-          <div className="text-center md:text-left">
-            <span className="group inline-block cursor-default font-mono text-sm tracking-widest text-[var(--gold)] transition-transform duration-300 hover:scale-105">
-              BHASKAR.DEV
-              <span className="block h-[1px] w-0 bg-[var(--gold)] transition-all duration-300 group-hover:w-full" />
-            </span>
-            <p className="mt-2 font-mono text-xs text-[var(--ash)]">
-              Developer × AI Engineer × Vibecoder
-            </p>
-          </div>
+  const currentYear = new Date().getFullYear();
 
-          <div className="font-mono text-xs text-[var(--ash)]">
-            <span className="text-[var(--sage)]">const</span> year ={" "}
-            <span className="inline-block text-[var(--gold)] transition-transform duration-300 hover:scale-110 hover:text-[var(--gold-glow)]">
-              {new Date().getFullYear()}
-            </span>;
-            <span className="text-[var(--ash)]"> // Built with passion</span>
-          </div>
+  return (
+    <footer className="relative w-full border-t border-white/20 bg-black px-6 py-12 text-white">
+      <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
+
+        {/* LEFT: COPYRIGHT */}
+        <div className="font-mono text-xs uppercase tracking-widest text-white/40">
+          © {currentYear} {profile?.name || "Bhaskar"}. All Rights Reserved.
         </div>
+
+        {/* CENTER: SCROLL TO TOP */}
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="font-mono text-xs uppercase tracking-widest text-white transition-colors hover:text-white/50"
+        >
+          ( Back to Top )
+        </button>
+
+        {/* RIGHT: CREDIT */}
+        <div className="font-mono text-xs uppercase tracking-widest text-white/40 text-right">
+          Designed & Built in 2026
+        </div>
+
       </div>
     </footer>
   );
