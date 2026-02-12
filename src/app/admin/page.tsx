@@ -493,7 +493,7 @@ export default function AdminPage() {
         {activeTab === "experiences" && (
           <div className="space-y-4">
             <button
-              onClick={() => setExperiences([...experiences, { role: "", company: "", period: "", points: [], sort_order: experiences.length }])}
+              onClick={() => setExperiences([...experiences, { role: "", company: "", period: "", description: "", sort_order: experiences.length }])}
               className="flex items-center gap-2 rounded-lg border border-dashed border-[var(--gold)]/20 px-4 py-2 font-mono text-xs text-[var(--gold)] transition-all hover:border-[var(--gold)]/40"
             >
               <Plus size={14} /> Add Experience
@@ -538,13 +538,13 @@ export default function AdminPage() {
                     />
                   </div>
                   <div className="sm:col-span-2">
-                    <label className="mb-1 block font-mono text-[10px] uppercase tracking-widest text-[var(--ash)]">Points (one per line)</label>
+                    <label className="mb-1 block font-mono text-[10px] uppercase tracking-widest text-[var(--ash)]">Description</label>
                     <textarea
                       rows={3}
-                      value={(exp.points || []).join("\n")}
+                      value={exp.description || ""}
                       onChange={(e) => {
                         const updated = [...experiences];
-                        updated[idx] = { ...updated[idx], points: e.target.value.split("\n").filter(Boolean) };
+                        updated[idx] = { ...updated[idx], description: e.target.value };
                         setExperiences(updated);
                       }}
                       className="w-full resize-none rounded-lg border border-[var(--gold)]/10 bg-[var(--carbon)] px-3 py-2 text-sm text-[var(--beige)] outline-none focus:border-[var(--gold)]/40"
