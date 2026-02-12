@@ -116,7 +116,7 @@ function LiquidPlane() {
 
 export default function FluidDistortionScene() {
     return (
-        <div className="absolute inset-0 z-0 h-full w-full">
+        <div className="fixed inset-0 z-0 h-full w-full pointer-events-none">
             <Canvas
                 camera={{ position: [0, 0, 2], fov: 75 }}
                 gl={{ antialias: true, alpha: true }}

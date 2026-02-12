@@ -12,10 +12,7 @@ export default function Hero({ profile }: { profile: any }) {
   const role = profile?.title || "DEVELOPER & AI ENGINEER";
 
   return (
-    <section className="relative flex min-h-screen w-full flex-col justify-between overflow-hidden bg-black px-6 py-12 text-white">
-
-      {/* 1. LIQUID BACKGROUND */}
-      <FluidDistortionScene />
+    <section className="relative flex min-h-screen w-full flex-col justify-between overflow-hidden px-6 py-12 text-white">
 
       {/* 2. OVERLAY GRAIN (Texture) */}
       <div className="pointer-events-none absolute inset-0 z-10 opacity-[0.05]"
