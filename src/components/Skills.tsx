@@ -37,7 +37,7 @@ function SkillNode({ skill, index, catIdx }: { skill: string; index: number; cat
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       className={`cursor-default rounded-full border px-4 py-2 font-mono text-xs transition-all duration-300 ${hovered
-        ? "border-[var(--gold)] bg-[var(--gold)]/10 text-[var(--gold)] glow-gold"
+        ? "border-[var(--gold)] bg-[var(--gold)]/10 text-[var(--gold)] shadow-[0_0_15px_rgba(244,208,63,0.3)] -translate-y-1"
         : "border-[var(--gold)]/10 bg-[var(--carbon-light)] text-[var(--ash)]"
         }`}
     >
@@ -55,11 +55,12 @@ function SkillCategory({ cat, catIdx }: { cat: typeof skillCategories[0]; catIdx
       ref={ref}
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: catIdx * 0.1 }}
-      className="glass rounded-2xl p-6"
+      transition={{ duration: 0.5, delay: catIdx * 0.15 }}
+      whileHover={{ y: -5, transition: { duration: 0.3 } }}
+      className="glass rounded-2xl p-6 transition-all duration-300 hover:border-[var(--gold)]/30 hover:shadow-[0_10px_30px_-10px_rgba(244,208,63,0.1)]"
     >
       <div className="mb-4 flex items-center gap-2">
-        <div className="h-2 w-2 rounded-full bg-[var(--gold)]" />
+        <div className="h-2 w-2 rounded-full bg-[var(--gold)] shadow-[0_0_10px_var(--gold)]" />
         <span className="font-mono text-xs uppercase tracking-widest text-[var(--gold)]">
           {cat.label}
         </span>
@@ -91,7 +92,7 @@ export default function Skills({ skills }: { skills: any[] }) {
       <div className="mx-auto max-w-5xl px-6">
         <SectionHeader label="// tech stack" title="Skills & Technologies" />
 
-        <div className="grid gap-12 md:grid-cols-2">
+        <div className="grid gap-8 md:grid-cols-2 lg:gap-12">
           {displayedCategories.map((cat, catIdx) => (
             <SkillCategory key={cat.label} cat={cat} catIdx={catIdx} />
           ))}
