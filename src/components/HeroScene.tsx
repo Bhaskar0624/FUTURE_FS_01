@@ -2,158 +2,108 @@
 
 import { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, Stars } from "@react-three/drei";
 import * as THREE from "three";
 
-function ParticleField() {
-  const meshRef = useRef<THREE.Points>(null);
-  const count = 800;
+// Vertex Shader: Handles the mesh deformation (waves)
+const vertexShader = `
+varying vec2 vUv;
+varying float vElevation;
+uniform float uTime;
 
-  const [positions, sizes] = useMemo(() => {
-    const pos = new Float32Array(count * 3);
-    const siz = new Float32Array(count);
-    for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 20;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 20;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 20;
-      siz[i] = Math.random() * 2 + 0.5;
-    }
-    return [pos, siz];
-  }, []);
+void main() {
+  vUv = uv;
+  
+  vec4 modelPosition = modelMatrix * vec4(position, 1.0);
+  
+  // Create gentle waves
+  float elevation = sin(modelPosition.x * 0.5 + uTime * 0.2) * 
+                    sin(modelPosition.y * 0.3 + uTime * 0.1) * 0.5;
+                    
+  // Add some complexity
+  elevation += sin(modelPosition.x * 2.0 + uTime * 0.5) * 0.1;
+  elevation += sin(modelPosition.y * 1.5 + uTime * 0.4) * 0.1;
+
+  modelPosition.z += elevation;
+  
+  vElevation = elevation;
+
+  vec4 viewPosition = viewMatrix * modelPosition;
+  vec4 projectedPosition = projectionMatrix * viewPosition;
+
+  gl_Position = projectedPosition;
+}
+`;
+
+// Fragment Shader: Handles the color mixing (Gold, Emerald, Coral)
+const fragmentShader = `
+varying vec2 vUv;
+varying float vElevation;
+uniform float uTime;
+
+void main() {
+  // Premium Palette Colors
+  vec3 colorGold = vec3(0.957, 0.816, 0.247);    // #F4D03F
+  vec3 colorEmerald = vec3(0.02, 0.588, 0.412);  // #059669
+  vec3 colorCoral = vec3(1.0, 0.42, 0.42);       // #FF6B6B
+  vec3 colorBlack = vec3(0.02, 0.02, 0.02);      // #050505 (Deep background)
+
+  // Mix factor based on UV and elevation
+  float mixStrength = vElevation * 2.0 + 0.5;
+  
+  // Creating the Aurora
+  vec3 color1 = mix(colorBlack, colorEmerald, smoothstep(0.0, 1.0, vUv.y + sin(uTime * 0.2) * 0.3));
+  vec3 color2 = mix(color1, colorGold, smoothstep(0.0, 0.8, sin(vUv.x * 2.0 + uTime * 0.2) * mixStrength));
+  vec3 finalColor = mix(color2, colorCoral, smoothstep(0.0, 1.0, vElevation * 1.5));
+
+  // Add subtle glow/grain
+  float grain = fract(sin(dot(vUv, vec2(12.9898, 78.233))) * 43758.5453);
+  finalColor += grain * 0.03;
+
+  gl_FragColor = vec4(finalColor, 0.7); // Slightly transparent
+}
+`;
+
+function AuroraMesh() {
+  const meshRef = useRef<THREE.Mesh>(null);
+
+  const uniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+    }),
+    []
+  );
 
   useFrame((state) => {
-    if (!meshRef.current) return;
-    meshRef.current.rotation.y = state.clock.elapsedTime * 0.02;
-    meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.01) * 0.1;
+    if (meshRef.current) {
+      uniforms.uTime.value = state.clock.getElapsedTime();
+    }
   });
 
   return (
-    <points ref={meshRef}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={count}
-          array={positions}
-          itemSize={3}
-        />
-        <bufferAttribute
-          attach="attributes-size"
-          count={count}
-          array={sizes}
-          itemSize={1}
-        />
-      </bufferGeometry>
-      <pointsMaterial
-        size={0.03}
-        color="#F4D03F"
+    <mesh ref={meshRef} rotation={[-Math.PI / 4, 0, 0]} position={[0, -1, -2]}>
+      {/* High segment count for smooth waves */}
+      <planeGeometry args={[14, 8, 128, 128]} />
+      <shaderMaterial
+        vertexShader={vertexShader}
+        fragmentShader={fragmentShader}
+        uniforms={uniforms}
         transparent
-        opacity={0.6}
-        sizeAttenuation
         blending={THREE.AdditiveBlending}
         depthWrite={false}
       />
-    </points>
+    </mesh>
   );
 }
 
-function FloatingGeo() {
-  const torusRef = useRef<THREE.Mesh>(null);
-  const octaRef = useRef<THREE.Mesh>(null);
-  const icoRef = useRef<THREE.Mesh>(null);
-
-  useFrame((state) => {
-    const t = state.clock.elapsedTime;
-    if (torusRef.current) {
-      torusRef.current.rotation.x = t * 0.2;
-      torusRef.current.rotation.y = t * 0.15;
-    }
-    if (octaRef.current) {
-      octaRef.current.rotation.x = t * 0.15;
-      octaRef.current.rotation.z = t * 0.1;
-      octaRef.current.position.y = Math.sin(t * 0.5) * 0.3 + 1;
-    }
-    if (icoRef.current) {
-      icoRef.current.rotation.y = t * 0.25;
-      icoRef.current.position.y = Math.cos(t * 0.4) * 0.2 - 1.5;
-    }
-  });
-
+export default function AuroraScene() {
   return (
-    <>
-      <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.5}>
-        <mesh ref={torusRef} position={[-3, 0, -2]}>
-          <torusGeometry args={[1, 0.3, 16, 40]} />
-          <meshStandardMaterial
-            color="#F4D03F"
-            wireframe
-            transparent
-            opacity={0.15}
-          />
-        </mesh>
-      </Float>
-
-      <Float speed={1} rotationIntensity={0.5} floatIntensity={0.3}>
-        <mesh ref={octaRef} position={[3.5, 1, -3]}>
-          <octahedronGeometry args={[0.8]} />
-          <meshStandardMaterial
-            color="#059669"
-            wireframe
-            transparent
-            opacity={0.2}
-          />
-        </mesh>
-      </Float>
-
-      <Float speed={2} rotationIntensity={0.2} floatIntensity={0.8}>
-        <mesh ref={icoRef} position={[2, -1.5, -1]}>
-          <icosahedronGeometry args={[0.5]} />
-          <meshStandardMaterial
-            color="#FF6B6B"
-            wireframe
-            transparent
-            opacity={0.12}
-          />
-        </mesh>
-      </Float>
-    </>
-  );
-}
-
-function MouseLight() {
-  const lightRef = useRef<THREE.PointLight>(null);
-
-  useFrame((state) => {
-    if (!lightRef.current) return;
-    const { x, y } = state.pointer;
-    lightRef.current.position.x = x * 5;
-    lightRef.current.position.y = y * 3;
-    lightRef.current.position.z = 3;
-  });
-
-  return <pointLight ref={lightRef} intensity={0.8} color="#F4D03F" distance={15} />;
-}
-
-export default function HeroScene() {
-  return (
-    <div className="absolute inset-0 z-0">
+    <div className="absolute inset-0 z-0 h-full w-full overflow-hidden opacity-60">
       <Canvas
-        camera={{ position: [0, 0, 6], fov: 60 }}
+        camera={{ position: [0, 0, 5], fov: 45 }}
         gl={{ antialias: true, alpha: true }}
         style={{ background: "transparent" }}
       >
-        <ambientLight intensity={0.15} />
-        <directionalLight position={[5, 5, 5]} intensity={0.3} color="#ffffff" />
-        <MouseLight />
-        <ParticleField />
-        <FloatingGeo />
-        <Stars
-          radius={50}
-          depth={50}
-          count={1000}
-          factor={2}
-          fade
-          speed={0.5}
-        />
+        <AuroraMesh />
       </Canvas>
     </div>
   );
