@@ -13,16 +13,26 @@ export const revalidate = 0; // Disable cache to see updates immediately
 
 async function fetchData() {
   try {
-    // Use relative URL so it works on both localhost and Vercel
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/api/data`, {
+    // On Vercel, use VERCEL_URL. Locally, use localhost
+    const protocol = process.env.VERCEL_URL ? 'https://' : 'http://';
+    const host = process.env.VERCEL_URL || 'localhost:3000';
+    const url = `${protocol}${host}/api/data`;
+
+    console.log('Fetching from:', url); // Debug log
+
+    const res = await fetch(url, {
       cache: 'no-store',
       next: { revalidate: 0 }
     });
+
     if (!res.ok) {
       console.error("Failed to fetch data:", res.status);
       return null;
     }
-    return await res.json();
+
+    const data = await res.json();
+    console.log('Fetched data:', data); // Debug log
+    return data;
   } catch (error) {
     console.error("Error fetching data:", error);
     return null;
