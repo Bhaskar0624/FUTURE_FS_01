@@ -90,7 +90,7 @@ function ProjectCard({ project, index }: { project: any; index: number }) {
               {project.tags && project.tags.map((tag: string) => (
                 <span
                   key={tag}
-                  className="rounded-full bg-[var(--carbon-lighter)] px-3 py-1 font-mono text-[10px] text-[var(--sage-light)]"
+                  className="tag-hover rounded-full bg-[var(--carbon-lighter)] px-3 py-1 font-mono text-[10px] text-[var(--sage-light)]"
                 >
                   {tag}
                 </span>

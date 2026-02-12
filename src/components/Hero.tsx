@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
+import MagneticButton from "./ui/MagneticButton";
 
 const HeroScene = dynamic(() => import("./HeroScene"), { ssr: false });
 
@@ -68,28 +69,34 @@ export default function Hero({ profile }: { profile: any }) {
           transition={{ duration: 0.6, delay: 1 }}
           className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
         >
-          <a
-            href="#projects"
-            className="group relative overflow-hidden rounded-full bg-[var(--gold)] px-8 py-3 font-mono text-xs uppercase tracking-widest text-[var(--carbon)] transition-all hover:shadow-[0_0_30px_rgba(201,169,110,0.3)]"
-          >
-            <span className="relative z-10">Explore My Work</span>
-            <div className="absolute inset-0 -translate-x-full bg-[var(--gold-light)] transition-transform group-hover:translate-x-0" />
-          </a>
+          <MagneticButton>
+            <a
+              href="#projects"
+              className="group relative overflow-hidden rounded-full bg-[var(--gold)] px-8 py-3 font-mono text-xs uppercase tracking-widest text-[var(--carbon)] transition-all hover:shadow-[0_0_40px_rgba(244,208,63,0.5)] hover:scale-105"
+            >
+              <span className="relative z-10">Explore My Work</span>
+              <div className="absolute inset-0 -translate-x-full bg-[var(--gold-light)] transition-transform group-hover:translate-x-0" />
+            </a>
+          </MagneticButton>
           {profile?.resume_url ? (
-            <a
-              href={profile.resume_url}
-              target="_blank"
-              className="rounded-full border border-[var(--gold)]/30 px-8 py-3 font-mono text-xs uppercase tracking-widest text-[var(--gold)] transition-all hover:border-[var(--gold)] hover:bg-[var(--gold)]/5"
-            >
-              Resume
-            </a>
+            <MagneticButton>
+              <a
+                href={profile.resume_url}
+                target="_blank"
+                className="rounded-full border border-[var(--gold)]/30 px-8 py-3 font-mono text-xs uppercase tracking-widest text-[var(--gold)] transition-all hover:border-[var(--gold)] hover:bg-[var(--gold)]/5 hover:shadow-[0_0_30px_rgba(244,208,63,0.3)] hover:scale-105"
+              >
+                Resume
+              </a>
+            </MagneticButton>
           ) : (
-            <a
-              href="#contact"
-              className="rounded-full border border-[var(--gold)]/30 px-8 py-3 font-mono text-xs uppercase tracking-widest text-[var(--gold)] transition-all hover:border-[var(--gold)] hover:bg-[var(--gold)]/5"
-            >
-              Get in Touch
-            </a>
+            <MagneticButton>
+              <a
+                href="#contact"
+                className="rounded-full border border-[var(--gold)]/30 px-8 py-3 font-mono text-xs uppercase tracking-widest text-[var(--gold)] transition-all hover:border-[var(--gold)] hover:bg-[var(--gold)]/5 hover:shadow-[0_0_30px_rgba(244,208,63,0.3)] hover:scale-105"
+              >
+                Get in Touch
+              </a>
+            </MagneticButton>
           )}
         </motion.div>
 
