@@ -45,7 +45,7 @@ function ParticleField() {
       </bufferGeometry>
       <pointsMaterial
         size={0.03}
-        color="#c9a96e"
+        color="#F4D03F"
         transparent
         opacity={0.6}
         sizeAttenuation
@@ -84,7 +84,7 @@ function FloatingGeo() {
         <mesh ref={torusRef} position={[-3, 0, -2]}>
           <torusGeometry args={[1, 0.3, 16, 40]} />
           <meshStandardMaterial
-            color="#c9a96e"
+            color="#F4D03F"
             wireframe
             transparent
             opacity={0.15}
@@ -96,7 +96,7 @@ function FloatingGeo() {
         <mesh ref={octaRef} position={[3.5, 1, -3]}>
           <octahedronGeometry args={[0.8]} />
           <meshStandardMaterial
-            color="#6b7c5e"
+            color="#059669"
             wireframe
             transparent
             opacity={0.2}
@@ -108,7 +108,7 @@ function FloatingGeo() {
         <mesh ref={icoRef} position={[2, -1.5, -1]}>
           <icosahedronGeometry args={[0.5]} />
           <meshStandardMaterial
-            color="#c9a96e"
+            color="#FF6B6B"
             wireframe
             transparent
             opacity={0.12}
@@ -130,7 +130,7 @@ function MouseLight() {
     lightRef.current.position.z = 3;
   });
 
-  return <pointLight ref={lightRef} intensity={0.8} color="#c9a96e" distance={15} />;
+  return <pointLight ref={lightRef} intensity={0.8} color="#F4D03F" distance={15} />;
 }
 
 export default function HeroScene() {
@@ -142,7 +142,7 @@ export default function HeroScene() {
         style={{ background: "transparent" }}
       >
         <ambientLight intensity={0.15} />
-        <directionalLight position={[5, 5, 5]} intensity={0.3} color="#e8e4de" />
+        <directionalLight position={[5, 5, 5]} intensity={0.3} color="#ffffff" />
         <MouseLight />
         <ParticleField />
         <FloatingGeo />
