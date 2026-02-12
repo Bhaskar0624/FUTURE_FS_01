@@ -2,150 +2,108 @@
 
 import { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { PerspectiveCamera, Float, Stars } from "@react-three/drei";
 import * as THREE from "three";
 
-// 1. SHARP INFINITE GRID
-// We use a custom shader on a plane to get perfectly sharp lines that don't aliasing badly
-const GridFloor = () => {
+// Vertex Shader: Handles the mesh deformation (waves)
+const vertexShader = `
+varying vec2 vUv;
+varying float vElevation;
+uniform float uTime;
+
+void main() {
+  vUv = uv;
+  
+  vec4 modelPosition = modelMatrix * vec4(position, 1.0);
+  
+  // Create gentle waves
+  float elevation = sin(modelPosition.x * 0.5 + uTime * 0.2) * 
+                    sin(modelPosition.y * 0.3 + uTime * 0.1) * 0.5;
+                    
+  // Add some complexity
+  elevation += sin(modelPosition.x * 2.0 + uTime * 0.5) * 0.1;
+  elevation += sin(modelPosition.y * 1.5 + uTime * 0.4) * 0.1;
+
+  modelPosition.z += elevation;
+  
+  vElevation = elevation;
+
+  vec4 viewPosition = viewMatrix * modelPosition;
+  vec4 projectedPosition = projectionMatrix * viewPosition;
+
+  gl_Position = projectedPosition;
+}
+`;
+
+// Fragment Shader: Handles the color mixing (Gold, Emerald, Coral)
+const fragmentShader = `
+varying vec2 vUv;
+varying float vElevation;
+uniform float uTime;
+
+void main() {
+  // Premium Palette Colors
+  vec3 colorGold = vec3(0.957, 0.816, 0.247);    // #F4D03F
+  vec3 colorEmerald = vec3(0.02, 0.588, 0.412);  // #059669
+  vec3 colorCoral = vec3(1.0, 0.42, 0.42);       // #FF6B6B
+  vec3 colorBlack = vec3(0.02, 0.02, 0.02);      // #050505 (Deep background)
+
+  // Mix factor based on UV and elevation
+  float mixStrength = vElevation * 2.0 + 0.5;
+  
+  // Creating the Aurora
+  vec3 color1 = mix(colorBlack, colorEmerald, smoothstep(0.0, 1.0, vUv.y + sin(uTime * 0.2) * 0.3));
+  vec3 color2 = mix(color1, colorGold, smoothstep(0.0, 0.8, sin(vUv.x * 2.0 + uTime * 0.2) * mixStrength));
+  vec3 finalColor = mix(color2, colorCoral, smoothstep(0.0, 1.0, vElevation * 1.5));
+
+  // Add subtle glow/grain
+  float grain = fract(sin(dot(vUv, vec2(12.9898, 78.233))) * 43758.5453);
+  finalColor += grain * 0.03;
+
+  gl_FragColor = vec4(finalColor, 0.7); // Slightly transparent
+}
+`;
+
+function AuroraMesh() {
+  const meshRef = useRef<THREE.Mesh>(null);
+
+  const uniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+    }),
+    []
+  );
+
+  useFrame((state) => {
+    if (meshRef.current) {
+      uniforms.uTime.value = state.clock.getElapsedTime();
+    }
+  });
+
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]}>
-      <planeGeometry args={[50, 50, 50, 50]} />
-      <meshBasicMaterial
-        color="#F4D03F"
-        wireframe
+    <mesh ref={meshRef} rotation={[-Math.PI / 4, 0, 0]} position={[0, -1, -2]}>
+      {/* High segment count for smooth waves */}
+      <planeGeometry args={[14, 8, 128, 128]} />
+      <shaderMaterial
+        vertexShader={vertexShader}
+        fragmentShader={fragmentShader}
+        uniforms={uniforms}
         transparent
-        opacity={0.15}
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
       />
     </mesh>
   );
-};
-
-// 2. INTERACTIVE DATA BLOCKS
-// Sharp, rotating cubes/wireframes that react to mouse
-const DataBlock = ({ position, color, speed, rotSpeed }: { position: [number, number, number], color: string, speed: number, rotSpeed: number }) => {
-  const meshRef = useRef<THREE.Mesh>(null);
-
-  useFrame((state) => {
-    if (!meshRef.current) return;
-    const t = state.clock.elapsedTime;
-
-    // Rotate
-    meshRef.current.rotation.x = t * rotSpeed;
-    meshRef.current.rotation.y = t * rotSpeed * 0.5;
-
-    // Float
-    meshRef.current.position.y = position[1] + Math.sin(t * speed) * 0.5;
-
-    // Mouse interaction (subtle look-at or repel could be added here)
-  });
-
-  return (
-    <Float speed={speed} rotationIntensity={0.5} floatIntensity={0.5}>
-      <mesh ref={meshRef} position={position}>
-        <boxGeometry args={[0.8, 0.8, 0.8]} />
-        <meshBasicMaterial color={color} wireframe transparent opacity={0.3} />
-      </mesh>
-      {/* Inner solid core for sharpness */}
-      <mesh position={position} scale={[0.4, 0.4, 0.4]}>
-        <boxGeometry args={[0.8, 0.8, 0.8]} />
-        <meshBasicMaterial color={color} transparent opacity={0.8} />
-      </mesh>
-    </Float>
-  );
-};
-
-// 3. MOVING DATA STREAMS (PARTICLES)
-// Sharp points moving fast in lines
-const DataStream = () => {
-  const count = 100;
-  const meshRef = useRef<THREE.Points>(null);
-
-  const [positions, speeds] = useMemo(() => {
-    const pos = new Float32Array(count * 3);
-    const spd = new Float32Array(count);
-
-    for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 20; // x
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 10; // y
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 10; // z
-      spd[i] = 0.05 + Math.random() * 0.1;
-    }
-    return [pos, spd];
-  }, []);
-
-  useFrame(() => {
-    if (!meshRef.current) return;
-    const positionsAttr = meshRef.current.geometry.attributes.position as THREE.BufferAttribute;
-
-    for (let i = 0; i < count; i++) {
-      let y = positionsAttr.getY(i);
-      y += speeds[i];
-
-      if (y > 5) {
-        y = -5;
-      }
-
-      positionsAttr.setY(i, y);
-    }
-    positionsAttr.needsUpdate = true;
-  });
-
-  return (
-    <points ref={meshRef}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={count}
-          array={positions}
-          itemSize={3}
-        />
-      </bufferGeometry>
-      <pointsMaterial size={0.03} color="#059669" transparent opacity={0.6} sizeAttenuation />
-    </points>
-  );
-};
+}
 
 export default function HeroScene() {
-  // Mouse movement interaction for camera
-  const MouseTracker = () => {
-    useFrame((state) => {
-      const { x, y } = state.pointer;
-      // Subtle parallax
-      state.camera.position.x += (x * 0.5 - state.camera.position.x) * 0.05;
-      state.camera.position.y += (y * 0.5 - state.camera.position.y) * 0.05;
-      state.camera.lookAt(0, 0, 0);
-    });
-    return null;
-  };
-
   return (
-    <div className="absolute inset-0 z-0 h-full w-full opacity-80">
+    <div className="absolute inset-0 z-0 h-full w-full overflow-hidden opacity-60">
       <Canvas
+        camera={{ position: [0, 0, 5], fov: 45 }}
         gl={{ antialias: true, alpha: true }}
         style={{ background: "transparent" }}
       >
-        <PerspectiveCamera makeDefault position={[0, 0, 8]} fov={50} />
-        <MouseTracker />
-
-        {/* Lights */}
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} intensity={1} color="#F4D03F" />
-
-        {/* Elements */}
-        <GridFloor />
-
-        {/* Floating Tech Objects */}
-        <DataBlock position={[-3, 1, -2]} color="#F4D03F" speed={1.5} rotSpeed={0.4} />
-        <DataBlock position={[3.5, -1, -1]} color="#059669" speed={1.2} rotSpeed={0.3} />
-        <DataBlock position={[0, 2, -4]} color="#FF6B6B" speed={0.8} rotSpeed={0.2} />
-
-        {/* Particles */}
-        <DataStream />
-        <Stars radius={50} depth={50} count={2000} factor={4} saturation={0} fade speed={1} />
-
-        {/* Fog to hide grid edges */}
-        <fog attach="fog" args={['#000000', 5, 20]} />
+        <AuroraMesh />
       </Canvas>
     </div>
   );
