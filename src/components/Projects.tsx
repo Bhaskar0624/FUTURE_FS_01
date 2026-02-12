@@ -5,46 +5,7 @@ import { useRef, useState } from "react";
 import SectionHeader from "./SectionHeader";
 import { ExternalLink, Github } from "lucide-react";
 
-const projects = [
-  {
-    title: "AI Code Assistant",
-    desc: "An intelligent code completion and review tool powered by LLMs with RAG architecture for context-aware suggestions.",
-    tags: ["Python", "LangChain", "OpenAI", "React"],
-    category: "AI",
-    image: null,
-    github: "#",
-    live: "#",
-  },
-  {
-    title: "Neural Style Transfer App",
-    desc: "Real-time artistic style transfer using deep neural networks. Transform photos into art with various painter styles.",
-    tags: ["PyTorch", "FastAPI", "Next.js", "TailwindCSS"],
-    category: "AI",
-    image: null,
-    github: "#",
-    live: "#",
-  },
-  {
-    title: "DevFlow Dashboard",
-    desc: "A developer productivity dashboard with real-time analytics, GitHub integration, and automated workflow tracking.",
-    tags: ["Next.js", "TypeScript", "Supabase", "D3.js"],
-    category: "Web",
-    image: null,
-    github: "#",
-    live: "#",
-  },
-  {
-    title: "Vibecoder Platform",
-    desc: "A creative coding playground with live preview, AI-assisted code generation, and shareable snippets.",
-    tags: ["React", "Three.js", "Monaco", "WebSocket"],
-    category: "Web",
-    image: null,
-    github: "#",
-    live: "#",
-  },
-];
-
-function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
+function ProjectCard({ project, index }: { project: any; index: number }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const [hovered, setHovered] = useState(false);
@@ -80,17 +41,12 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
             </div>
           </>
         )}
-        {/* Category badge */}
-        <div className="absolute top-4 left-4">
-          <span className="rounded-full border border-[var(--gold)]/20 bg-[var(--carbon)]/80 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-[var(--gold)]">
-            {project.category}
-          </span>
-        </div>
-        {/* Hover overlay */}
+
+        {/* Hover overlay with links */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: hovered ? 1 : 0 }}
-          className="absolute inset-0 flex items-center justify-center gap-4 bg-[var(--carbon)]/80 backdrop-blur-sm"
+          className="absolute inset-0 flex items-center justify-center gap-4 bg-[var(--carbon)]/90 backdrop-blur-sm"
         >
           <a
             href={project.github}
@@ -112,7 +68,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
         <h3 className="mb-2 text-lg font-medium text-[var(--beige)]">{project.title}</h3>
         <p className="mb-4 text-sm leading-relaxed text-[var(--ash)]">{project.desc}</p>
         <div className="flex flex-wrap gap-2">
-          {project.tags.map((tag) => (
+          {project.tags.map((tag: string) => (
             <span
               key={tag}
               className="rounded-full bg-[var(--carbon-lighter)] px-3 py-1 font-mono text-[10px] text-[var(--sage-light)]"
@@ -127,9 +83,12 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
 }
 
 export default function Projects({ projects }: { projects: any[] }) {
-  // Use passed projects or fallback to empty array. 
-  // If projects is empty, we can show a message or just nothing.
-  const displayProjects = projects?.length > 0 ? projects : [];
+  // Use passed projects or fallback to empty array
+  const displayProjects = projects && projects.length > 0 ? projects : [];
+
+  if (displayProjects.length === 0) {
+    return null; // Don't render section if no projects
+  }
 
   return (
     <section id="projects" className="relative py-32">
