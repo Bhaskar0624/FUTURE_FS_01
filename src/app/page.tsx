@@ -62,7 +62,7 @@ export default async function Home() {
     <>
       <CursorWrapper />
       {/* GLOBAL LIQUID BACKGROUND */}
-      <div className="fixed inset-0 z-0 bg-zinc-900/20">
+      <div className="fixed inset-0 z-0">
         <FluidDistortionScene />
       </div>
       <Navbar />

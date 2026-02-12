@@ -42,24 +42,27 @@ varying vec2 vUv;
 varying float vElevation;
 uniform float uTime;
 
-  // MERCURY / SILVER PALETTE (High Visibility)
-  vec3 black = vec3(0.05);
-  vec3 darkGray = vec3(0.2);
-  vec3 silver = vec3(0.8);
+  // COSMIC OIL PALETTE (High Visibility & Color)
+  vec3 deepBlue = vec3(0.02, 0.05, 0.1);
+  vec3 cyan = vec3(0.2, 0.6, 0.8);
+  vec3 violet = vec3(0.4, 0.2, 0.8);
   vec3 white = vec3(1.0);
 
   // Dynamic mixing based on elevation and time
   float mixStrength = smoothstep(-0.2, 0.5, vElevation);
   
-  // Base flow (Dark Gray -> Silver)
-  vec3 colorA = mix(black, darkGray, sin(vUv.x * 3.0 + uTime) * 0.2);
-  vec3 colorB = mix(colorA, silver, mixStrength);
+  // Base flow (Deep Blue Void)
+  vec3 colorA = mix(deepBlue, vec3(0.0), sin(vUv.x * 3.0 + uTime) * 0.2);
+  
+  // Ripple Colors (Cyan & Violet mixture)
+  vec3 rippleColor = mix(cyan, violet, sin(vElevation * 5.0 + uTime));
+  vec3 colorB = mix(colorA, rippleColor, mixStrength);
   
   // Strong Highlights (White)
   vec3 finalColor = mix(colorB, white, smoothstep(0.4, 0.6, vElevation));
   
-  // Metallic shimmer (Increased intensity)
-  finalColor += vec3(0.15) * sin(vElevation * 20.0 + uTime * 5.0);
+  // Iridescent shimmer
+  finalColor += vec3(0.1) * sin(vElevation * 20.0 + uTime * 5.0);
 
   gl_FragColor = vec4(finalColor, 1.0);
 }
