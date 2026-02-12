@@ -61,10 +61,6 @@ export default async function Home() {
   return (
     <>
       <CursorWrapper />
-      {/* GLOBAL LIQUID BACKGROUND */}
-      <div className="fixed inset-0 z-0">
-        <FluidDistortionScene />
-      </div>
       <Navbar />
       <main className="relative">
         <Hero profile={profile} />

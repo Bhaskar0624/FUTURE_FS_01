@@ -4,77 +4,118 @@ import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import MagneticButton from "./ui/MagneticButton";
 
-// Dynamically import the new Liquid Scene
-const FluidDistortionScene = dynamic(() => import("./FluidDistortionScene"), { ssr: false });
+const HeroScene = dynamic(() => import("./HeroScene"), { ssr: false });
 
 export default function Hero({ profile }: { profile: any }) {
-  const name = profile?.name || "BHASKAR";
-  const role = profile?.title || "DEVELOPER & AI ENGINEER";
+  // Use profile data or fallbacks
+  const name = profile?.name || "Bhaskar";
+  const title = profile?.title || "Full Stack Developer";
+  const bio = profile?.bio || "Building intelligent, cinematic digital experiences at the intersection of code, AI, and creative engineering.";
 
   return (
-    <section className="relative flex min-h-screen w-full flex-col justify-between overflow-hidden px-6 py-12 text-white">
+    <section id="hero" className="relative flex min-h-screen items-center justify-center overflow-hidden">
+      {/* 3D Scene */}
+      <HeroScene />
 
-      {/* 2. OVERLAY GRAIN (Texture) */}
-      <div className="pointer-events-none absolute inset-0 z-10 opacity-[0.05]"
-        style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
-      />
+      {/* Animated gradient mesh background */}
+      <div className="pointer-events-none absolute inset-0 gradient-mesh" />
 
-      {/* 3. NAVIGATION (Minimalist Corners) */}
-      <nav className="relative z-20 flex w-full justify-between font-mono text-xs tracking-widest uppercase text-white/70">
-        <div>( {new Date().getFullYear()} )</div>
-        <div className="text-right">Based in India<br />Available for work</div>
-      </nav>
+      {/* Grid overlay */}
+      <div className="pointer-events-none absolute inset-0 grid-bg opacity-40" />
 
-      {/* 4. MAIN CONTENT (Editorial Style) */}
-      <div className="relative z-20 flex h-full flex-col justify-center">
+      {/* Gradient overlays */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[var(--carbon)] via-transparent to-[var(--carbon)]" />
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[var(--carbon)] to-transparent" />
 
-        {/* Massive Role Text */}
+      {/* Content */}
+      <div className="relative z-10 mx-auto max-w-5xl px-6 text-center">
+        {/* Terminal tag */}
         <motion.div
-          initial={{ opacity: 0, y: 100 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mb-6 inline-block"
         >
-          <h2 className="mb-4 text-xs font-bold tracking-[0.5em] text-white/50">
-            {role}
-          </h2>
+          <span className="font-mono text-xs tracking-[0.3em] uppercase text-[var(--ash)]">
+            <span className="text-[var(--sage)]">~/</span> {title.toLowerCase()}
+          </span>
         </motion.div>
 
-        {/* GIGANTIC NAME (Shoya Style) */}
+        {/* Main heading */}
         <motion.h1
-          className="relative text-[12vw] font-black leading-[0.8] tracking-tighter text-white"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="mb-6 text-5xl font-light leading-tight tracking-tight sm:text-7xl md:text-8xl"
         >
-          {name}
-        </motion.h1>
-        <motion.h1
-          className="relative ml-[10vw] text-[12vw] font-black leading-[0.8] tracking-tighter text-transparent"
-          style={{ WebkitTextStroke: "1px rgba(255, 255, 255, 0.5)" }} // White Outline
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1.2, delay: 0.2, ease: "easeOut" }}
-        >
-          DEV
+          <span className="block text-[var(--beige)]">Hi, I&apos;m</span>
+          <span className="block text-gradient-animated font-medium">{name}</span>
         </motion.h1>
 
+        {/* Subtitle */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+          className="mx-auto mb-10 max-w-lg text-base leading-relaxed text-[var(--ash)] sm:text-lg"
+        >
+          {bio}
+        </motion.p>
+
+        {/* CTA Buttons - Resume URL logic added */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1 }}
+          className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
+        >
+          <MagneticButton>
+            <a
+              href="#projects"
+              className="relative overflow-hidden rounded-full bg-[var(--gold)] px-8 py-3 font-mono text-xs uppercase tracking-widest text-[var(--carbon)] transition-all hover:shadow-[0_0_40px_rgba(244,208,63,0.5)] hover:scale-105"
+            >
+              <span className="relative z-10">Explore My Work</span>
+            </a>
+          </MagneticButton>
+          {profile?.resume_url ? (
+            <MagneticButton>
+              <a
+                href={profile.resume_url}
+                target="_blank"
+                className="rounded-full border border-[var(--gold)]/30 px-8 py-3 font-mono text-xs uppercase tracking-widest text-[var(--gold)] transition-all hover:border-[var(--gold)] hover:bg-[var(--gold)]/5 hover:shadow-[0_0_30px_rgba(244,208,63,0.3)] hover:scale-105"
+              >
+                Resume
+              </a>
+            </MagneticButton>
+          ) : (
+            <MagneticButton>
+              <a
+                href="#contact"
+                className="rounded-full border border-[var(--gold)]/30 px-8 py-3 font-mono text-xs uppercase tracking-widest text-[var(--gold)] transition-all hover:border-[var(--gold)] hover:bg-[var(--gold)]/5 hover:shadow-[0_0_30px_rgba(244,208,63,0.3)] hover:scale-105"
+              >
+                Get in Touch
+              </a>
+            </MagneticButton>
+          )}
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2"
+        >
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="flex flex-col items-center gap-2"
+          >
+            <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--ash)]">Scroll</span>
+            <div className="h-8 w-px bg-gradient-to-b from-[var(--gold)]/50 to-transparent" />
+          </motion.div>
+        </motion.div>
       </div>
-
-      {/* 5. BOTTOM INTERACTION AREA */}
-      <div className="relative z-20 flex w-full items-end justify-between">
-
-        <div className="max-w-md text-sm leading-relaxed text-white/60">
-          Crafting <span className="text-white">liquid digital experiences</span> at the intersection of design and artificial intelligence.
-        </div>
-
-        <MagneticButton>
-          <a href="#projects" className="group flex h-24 w-24 items-center justify-center rounded-full border border-white/20 bg-white/5 backdrop-blur-sm transition-all hover:bg-white hover:text-black">
-            <span className="font-mono text-xs uppercase tracking-widest group-hover:font-bold">Explore</span>
-          </a>
-        </MagneticButton>
-
-      </div>
-
     </section>
   );
 }

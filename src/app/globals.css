@@ -47,49 +47,110 @@
 :root {
   --radius: 0.625rem;
 
-  /* SHOYA STYLE: MONOCHROME PALETTE */
-  /* Strict Black & White */
-  --background: #000000;
-  --foreground: #ffffff;
+  /* Premium Innovative Color Palette */
+  /* Primary: Champagne Gold - Luxurious, warm, sophisticated */
+  --gold: #F4D03F;
+  /* Vibrant champagne gold */
+  --gold-light: #F9E79F;
+  /* Light champagne */
+  --gold-dark: #D4AF37;
+  /* Rich antique gold */
+  --gold-glow: #FFE55C;
+  /* Bright gold for glows */
 
-  --gold: #ffffff;
-  /* Re-mapping gold to white for compatibility */
-  --emerald: #ffffff;
-  /* Re-mapping emerald to white */
-  --coral: #ffffff;
-  /* Re-mapping coral to white */
-  --amber: #ffffff;
-  /* Re-mapping amber to white */
+  /* Accent: Deep Emerald - Rich, premium, natural */
+  --emerald: #059669;
+  /* Deep emerald green */
+  --emerald-light: #10B981;
+  /* Bright emerald */
+  --emerald-dark: #047857;
+  /* Dark forest green */
 
-  --carbon: #000000;
-  --carbon-light: #111111;
-  --ash: #888888;
-  --beige: #ffffff;
-  --sage: #ffffff;
+  /* Accent: Coral Sunset - Warm, energetic, premium */
+  --coral: #FF6B6B;
+  /* Vibrant coral */
+  --coral-light: #FF8787;
+  /* Light coral */
+  --coral-dark: #EE5A52;
+  /* Deep coral */
 
-  /* Border/Input */
-  --border: rgba(255, 255, 255, 0.1);
-  --input: rgba(255, 255, 255, 0.1);
-  --ring: #ffffff;
+  /* Accent: Amber - Warm, inviting, premium */
+  --amber: #F59E0B;
+  /* Rich amber */
+  --amber-light: #FBBF24;
+  /* Bright amber */
 
-  /* Chart Colors (Grayscale) */
-  --chart-1: #ffffff;
-  --chart-2: #cccccc;
-  --chart-3: #999999;
-  --chart-4: #666666;
-  --chart-5: #333333;
+  /* Neutrals: Rich Blacks & Warm Grays */
+  --background: #0a0a0a;
+  /* Pure deep black */
+  --carbon: #0a0a0a;
+  --carbon-light: #1a1a1a;
+  /* Rich charcoal */
+  --carbon-lighter: #2a2a2a;
+  /* Warm dark gray */
+  --surface: #1a1a1a;
+  /* Card background */
 
-  /* Sidebar */
-  --sidebar: #050505;
-  --sidebar-foreground: #ffffff;
-  --sidebar-primary: #ffffff;
-  --sidebar-primary-foreground: #000000;
-  --sidebar-accent: #111111;
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #222222;
-  --sidebar-ring: #ffffff;
+  /* Text Colors */
+  --text-primary: #FAFAFA;
+  /* Warm white */
+  --text-secondary: #D4D4D8;
+  /* Light gray */
+  --text-muted: #A1A1AA;
+  /* Muted gray */
 
-  /* Premium font stack - Keeping Inter/Space Grotesk as they fit the style */
+  /* Semantic Colors */
+  --card: #1a1a1a;
+  --card-foreground: #FAFAFA;
+  --popover: #1a1a1a;
+  --popover-foreground: #FAFAFA;
+  --primary: #F4D03F;
+  /* Champagne gold */
+  --primary-foreground: #0a0a0a;
+  --secondary: #2a2a2a;
+  --secondary-foreground: #FAFAFA;
+  --muted: #2a2a2a;
+  --muted-foreground: #A1A1AA;
+  --accent: #059669;
+  /* Emerald */
+  --accent-foreground: #FAFAFA;
+  --destructive: #EE5A52;
+  /* Coral */
+  --border: rgba(244, 208, 63, 0.15);
+  --input: rgba(244, 208, 63, 0.2);
+  --ring: #F4D03F;
+
+  /* Chart Colors */
+  --chart-1: #F4D03F;
+  /* Gold */
+  --chart-2: #059669;
+  /* Emerald */
+  --chart-3: #FF6B6B;
+  /* Coral */
+  --chart-4: #F59E0B;
+  /* Amber */
+  --chart-5: #A1A1AA;
+  /* Gray */
+
+  /* Sidebar Colors */
+  --sidebar: #0e0e0e;
+  --sidebar-foreground: #FAFAFA;
+  --sidebar-primary: #F4D03F;
+  --sidebar-primary-foreground: #0a0a0a;
+  --sidebar-accent: #2a2a2a;
+  --sidebar-accent-foreground: #FAFAFA;
+  --sidebar-border: rgba(244, 208, 63, 0.12);
+  --sidebar-ring: #F4D03F;
+
+  /* Legacy compatibility */
+  --beige: #FAFAFA;
+  --beige-dark: #D4D4D8;
+  --ash: #A1A1AA;
+  --sage: #059669;
+  /* Now emerald */
+  --sage-light: #10B981;
+
+  /* Premium font stack */
   --font-heading: 'Space Grotesk', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
 }
@@ -100,51 +161,10 @@
   }
 
   body {
-    color: var(--foreground);
-    background: var(--background);
-    font-family: var(--font-body);
+    @apply bg-background text-foreground;
     overflow-x: hidden;
-    cursor: none;
-    /* Custom cursor */
-    position: relative;
-  }
-
-  /* Global Ambient Texture */
-  body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.15;
-    pointer-events: none;
-  }
-
-  /* Subtle Moving Fog */
-  body::after {
-    content: "";
-    position: fixed;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    z-index: -2;
-    background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.03), transparent 60%);
-    animation: fogMove 20s infinite alternate ease-in-out;
-    pointer-events: none;
-  }
-
-  @keyframes fogMove {
-    0% {
-      transform: translate(0, 0);
-    }
-
-    100% {
-      transform: translate(-2%, -2%);
-    }
+    font-family: var(--font-body);
+    letter-spacing: -0.01em;
   }
 
   h1,
@@ -479,7 +499,17 @@ html.lenis {
   transform: rotate(15deg) scale(1.1);
 }
 
-
+/* Scroll progress indicator */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--emerald), var(--coral));
+  transform-origin: 0%;
+  z-index: 9999;
+}
 
 /* Section reveal animation */
 @keyframes reveal {

@@ -31,92 +31,92 @@ function ProjectCard({ project, index }: { project: any; index: number }) {
             ? "border-[var(--gold)]/30 glow-gold"
             : "border-[var(--gold)]/5 bg-[var(--carbon-light)]"
             }`}
-          import { useState} from "react";
-        import {motion, AnimatePresence} from "framer-motion";
-        import Image from "next/image";
-
-        export default function Projects({projects}: {projects: any[] }) {
-  const [hoveredProject, setHoveredProject] = useState<number | null>(null);
-
-        return (
-        <section id="projects" className="relative min-h-screen w-full px-6 py-24 text-white">
-
-          {/* SECTION HEADER (Minimalist) */}
-          <div className="mb-20 flex w-full items-end justify-between border-b border-white/20 pb-4">
-            <h2 className="font-mono text-xs uppercase tracking-widest text-white/50">
-              ( Selected Works )
-            </h2>
-            <span className="font-mono text-xs text-white/50">{projects.length} Items</span>
-          </div>
-
-          {/* PROJECT LIST */}
-          <div className="relative z-10 flex flex-col">
-            {projects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                viewport={{ once: true }}
-                onMouseEnter={() => setHoveredProject(index)}
-                onMouseLeave={() => setHoveredProject(null)}
-                className="group relative flex w-full cursor-pointer items-center justify-between border-b border-white/10 py-12 transition-colors hover:bg-white/5 hover:text-white hover:px-6"
-              >
-                {/* Project Title (Huge) */}
-                <h3 className="font-heading text-6xl font-normal uppercase leading-none tracking-tight sm:text-7xl md:text-8xl">
-                  {project.title}
-                </h3>
-
-                {/* Project Meta (Tags) */}
-                <div className="hidden flex-col items-end gap-2 text-right sm:flex">
-                  <span className="font-mono text-xs tracking-widest uppercase opacity-60 group-hover:opacity-100">
-                    {project.tags?.[0] || "Development"}
-                  </span>
-                  <span className="font-mono text-xs tracking-widest uppercase opacity-40 group-hover:opacity-100">
-                    ( {2024 - index} )
+        >
+          {/* Project image */}
+          <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[var(--carbon-lighter)] to-[var(--carbon)]">
+            {project.image_url ? (
+              <img
+                src={project.image_url}
+                alt={project.title}
+                className="h-full w-full object-cover"
+                data-atropos-offset="5"
+              />
+            ) : (
+              <>
+                <div className="absolute inset-0 grid-bg opacity-30" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="font-mono text-6xl font-bold text-[var(--gold)]/10">
+                    {String(index + 1).padStart(2, "0")}
                   </span>
                 </div>
+              </>
+            )}
 
-                {/* Mobile Arrow */}
-                <div className="sm:hidden">
-                  <span className="text-2xl">→</span>
-                </div>
-
-              </motion.div>
-            ))}
-          </div>
-
-          {/* FLOATING PREVIEW IMAGE (Desktop Only) */}
-          <div className="pointer-events-none fixed inset-0 z-0 hidden items-center justify-center md:flex">
-            <AnimatePresence mode="wait">
-              {hoveredProject !== null && projects[hoveredProject] && (
+            {/* Hover overlay with links */}
             <motion.div
-              key={hoveredProject}
-              initial={{ opacity: 0, scale: 0.9, rotate: -2 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              exit={{ opacity: 0, scale: 1.1, rotate: 2 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-              className="relative aspect-video w-[600px] overflow-hidden bg-white/10"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: hovered ? 1 : 0 }}
+              className="absolute inset-0 flex items-center justify-center gap-4 bg-[var(--carbon)]/90 backdrop-blur-sm"
+              data-atropos-offset="10"
             >
-              {/* Image with slight parallax or filter */}
-              <div className="absolute inset-0 grayscale transition-all duration-500">
-                 {projects[hoveredProject].image_url ? (
-                    <Image
-                      src={projects[hoveredProject].image_url}
-                      alt={projects[hoveredProject].title}
-                      fill
-                      className="object-cover opacity-60"
-                    />
-                 ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-zinc-900">
-                        <span className="font-mono text-xs text-white/50">NO PREVIEW</span>
-                    </div>
-                 )}
-              </div>
-              
-              {/* Overlay Blend */}
-              <div className="absolute inset-0 bg-black/20 mix-blend-multiply" />
+              {project.github_url && (
+                <a
+                  href={project.github_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--gold)]/30 text-[var(--gold)] transition-colors hover:bg-[var(--gold)]/10"
+                >
+                  <Github size={16} />
+                </a>
+              )}
+              {project.live_url && (
+                <a
+                  href={project.live_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--gold)]/30 text-[var(--gold)] transition-colors hover:bg-[var(--gold)]/10"
+                >
+                  <ExternalLink size={16} />
+                </a>
+              )}
             </motion.div>
+          </div>
+
+          {/* Content */}
+          <div className="p-6" data-atropos-offset="3">
+            <h3 className="mb-2 text-lg font-medium text-[var(--beige)]">{project.title}</h3>
+            <p className="mb-4 text-sm leading-relaxed text-[var(--ash)]">{project.description}</p>
+            <div className="flex flex-wrap gap-2">
+              {project.tags && project.tags.map((tag: string) => (
+                <span
+                  key={tag}
+                  className="tag-hover rounded-full bg-[var(--carbon-lighter)] px-3 py-1 font-mono text-[10px] text-[var(--sage-light)]"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Atropos>
+    </motion.div>
+  );
+}
+
+export default function Projects({ projects }: { projects: any[] }) {
+  // Use passed projects or fallback to empty array
+  const displayProjects = projects && projects.length > 0 ? projects : [];
+
+  console.log('Projects component received:', projects); // Debug log
+
+  return (
+    <section id="projects" className="relative py-32">
+      <div className="mx-auto max-w-6xl px-6">
+        <SectionHeader label="// portfolio" title="Featured Projects" />
+
+        {displayProjects.length === 0 ? (
+          <p className="text-center text-[var(--ash)]">No projects to display yet.</p>
+        ) : (
           <div className="grid gap-8 sm:grid-cols-2">
             {displayProjects.map((project, i) => (
               <ProjectCard
@@ -134,8 +134,8 @@ function ProjectCard({ project, index }: { project: any; index: number }) {
               />
             ))}
           </div>
-              )}
-          </div>
-        </section>
-        );
+        )}
+      </div>
+    </section>
+  );
 }
