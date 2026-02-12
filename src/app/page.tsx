@@ -8,6 +8,7 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import CursorWrapper from "@/components/CursorWrapper";
 
+export const dynamic = 'force-dynamic'; // Force dynamic rendering
 export const revalidate = 0; // Disable cache to see updates immediately
 
 async function fetchData() {
