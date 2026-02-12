@@ -1,0 +1,82 @@
+{
+  "profile": {
+    "id": "1",
+    "name": "Bhaskar",
+    "title": "Full Stack Developer",
+    "email": "bhaskar@example.com",
+    "bio": "Passionate developer building amazing web experiences.",
+    "location": "India",
+    "status": "Available for hire",
+    "resume_url": "/uploads/1770893069988_Vyshnavi_Ravuri_Resume.docx",
+    "github_url": "",
+    "linkedin_url": "",
+    "twitter_url": "",
+    "seo_title": "Bhaskar - Portfolio",
+    "seo_description": "Portfolio of Bhaskar, a Full Stack Developer."
+  },
+  "projects": [
+    {
+      "id": "1",
+      "title": "AI Code Assistant",
+      "description": "An intelligent code completion and review tool powered by LLMs with RAG architecture for context-aware suggestions.",
+      "tags": [
+        "Python",
+        "LangChain",
+        "OpenAI",
+        "React"
+      ],
+      "category": "AI",
+      "image_url": "",
+      "github_url": "#",
+      "sort_order": 0
+    },
+    {
+      "id": "2",
+      "title": "Neural Style Transfer App",
+      "description": "Real-time artistic style transfer using deep neural networks. Transform photos into art with various painter styles.",
+      "tags": [
+        "PyTorch",
+        "FastAPI",
+        "Next.js",
+        "TailwindCSS"
+      ],
+      "category": "AI",
+      "image_url": "",
+      "github_url": "#",
+      "sort_order": 1
+    },
+    {
+      "id": "3",
+      "title": "DevFlow Dashboard",
+      "description": "A developer productivity dashboard with real-time analytics, GitHub integration, and automated workflow tracking.",
+      "tags": [
+        "Next.js",
+        "TypeScript",
+        "Supabase",
+        "D3.js"
+      ],
+      "category": "Web",
+      "image_url": "",
+      "github_url": "#",
+      "sort_order": 2
+    },
+    {
+      "id": "4",
+      "title": "Vibecoder Platform",
+      "description": "A creative coding playground with live preview, AI-assisted code generation, and shareable snippets.",
+      "tags": [
+        "React",
+        "Three.js",
+        "Monaco",
+        "WebSocket"
+      ],
+      "category": "Web",
+      "image_url": "",
+      "github_url": "#",
+      "sort_order": 3
+    }
+  ],
+  "experiences": [],
+  "skills": [],
+  "certificates": []
+}
