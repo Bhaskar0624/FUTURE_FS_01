@@ -88,116 +88,55 @@ export default function Contact({ profile }: { profile: any }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   initial={{ opacity: 0, y: 10 }}
-                  animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.3 + i * 0.1 }}
-                  whileHover={{ y: -5 }}
-                  className="group relative flex h-12 w-12 items-center justify-center perspective-1000"
-                  aria-label={social.label}
-                >
-                  <div className="relative h-full w-full transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-                    {/* Front */}
-                    <div className="absolute inset-0 flex h-full w-full items-center justify-center rounded-full border border-[var(--gold)]/10 bg-[var(--carbon)] text-[var(--ash)] [backface-visibility:hidden]">
-                      <social.icon size={20} />
-                    </div>
-                    {/* Back */}
-                    <div className="absolute inset-0 flex h-full w-full items-center justify-center rounded-full border border-[var(--gold)] bg-[var(--gold)] text-[var(--carbon)] [backface-visibility:hidden] [transform:rotateY(180deg)]">
-                      <social.icon size={20} />
-                    </div>
-                  </div>
-                </motion.a>
-              ))}
-            </div>
-          </motion.div>
+    <section id="contact" className="relative h-screen w-full bg-black px-6 py-24 text-white">
+      
+      {/* HEADER */}
+      <div className="mb-12 flex w-full items-end justify-between border-b border-white/20 pb-4">
+        <h2 className="font-mono text-xs uppercase tracking-widest text-white/50">
+          ( Contact )
+        </h2>
+      </div>
 
-          {/* Right - Form */}
-          <motion.form
-            onSubmit={handleSubmit}
-            initial={{ opacity: 0, x: 30 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="glass rounded-2xl p-8"
-          >
-            <div className="mb-6">
-              <label className="mb-2 block font-mono text-xs uppercase tracking-widest text-[var(--ash)]">
-                Name
-              </label>
-              <div className="group relative">
-                <input
-                  type="text"
-                  required
-                  value={formState.name}
-                  onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                  className="w-full rounded-lg border border-[var(--gold)]/10 bg-[var(--carbon)] px-4 py-3 text-sm text-[var(--beige)] outline-none transition-all duration-300 focus:border-[var(--gold)] focus:shadow-[0_0_20px_rgba(244,208,63,0.1)] group-hover:border-[var(--gold)]/30"
-                  placeholder="Your name"
-                />
-                <div className="absolute bottom-0 left-0 h-[1px] w-0 bg-[var(--gold)] transition-all duration-300 group-focus-within:w-full" />
-              </div>
-            </div>
-            <div className="mb-6">
-              <label className="mb-2 block font-mono text-xs uppercase tracking-widest text-[var(--ash)]">
-                Email
-              </label>
-              <div className="group relative">
-                <input
-                  type="email"
-                  required
-                  value={formState.email}
-                  onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                  className="w-full rounded-lg border border-[var(--gold)]/10 bg-[var(--carbon)] px-4 py-3 text-sm text-[var(--beige)] outline-none transition-all duration-300 focus:border-[var(--gold)] focus:shadow-[0_0_20px_rgba(244,208,63,0.1)] group-hover:border-[var(--gold)]/30"
-                  placeholder="your@email.com"
-                />
-                <div className="absolute bottom-0 left-0 h-[1px] w-0 bg-[var(--gold)] transition-all duration-300 group-focus-within:w-full" />
-              </div>
-            </div>
-            <div className="mb-8">
-              <label className="mb-2 block font-mono text-xs uppercase tracking-widest text-[var(--ash)]">
-                Message
-              </label>
-              <div className="group relative">
-                <textarea
-                  required
-                  rows={4}
-                  value={formState.message}
-                  onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                  className="w-full resize-none rounded-lg border border-[var(--gold)]/10 bg-[var(--carbon)] px-4 py-3 text-sm text-[var(--beige)] outline-none transition-all duration-300 focus:border-[var(--gold)] focus:shadow-[0_0_20px_rgba(244,208,63,0.1)] group-hover:border-[var(--gold)]/30"
-                  placeholder="Tell me about your project..."
-                />
-                <div className="absolute bottom-0 left-0 h-[1px] w-0 bg-[var(--gold)] transition-all duration-300 group-focus-within:w-full" />
-              </div>
-            </div>
-            <button
-              type="submit"
-              disabled={submitted}
-              className={`relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-lg px-6 py-4 font-mono text-xs uppercase tracking-widest transition-all duration-300 
-                ${submitted
-                  ? "bg-[var(--emerald)] text-white shadow-[0_0_20px_rgba(16,185,129,0.4)]"
-                  : "bg-[var(--gold)] text-[var(--carbon)] hover:shadow-[0_0_30px_rgba(244,208,63,0.4)] hover:scale-[1.02]"
-                } disabled:cursor-not-allowed`}
+      <div className="flex h-full flex-col justify-between">
+        
+        {/* BIG CTA */}
+        <div>
+          <h2 className="mb-8 font-heading text-6xl font-normal uppercase leading-[0.85] tracking-tight sm:text-8xl md:text-9xl">
+            Let's <br/> Work <br/> Together
+          </h2>
+          
+          <MagneticButton>
+            <a 
+              href={`mailto:${profile?.email || "hello@bhaskar.dev"}`}
+              className="inline-flex h-20 items-center justify-center rounded-full border border-white bg-white px-10 text-black transition-transform hover:scale-105"
             >
-              <span className="relative z-10 flex items-center gap-2">
-                {submitted ? (
-                  <>
-                    <motion.span
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                    >
-                      Message Sent!
-                    </motion.span>
-                  </>
-                ) : (
-                  <>
-                    Send Message <Send size={14} />
-                  </>
-                )}
-              </span>
-              {!submitted && (
-                <div className="absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-300 group-hover:translate-x-0" />
-              )}
-            </button>
-          </motion.form>
+              <span className="font-mono text-sm uppercase tracking-widest font-bold">Email Me</span>
+            </a>
+          </MagneticButton>
         </div>
+
+        {/* FOOTER INFO */}
+        <div className="flex w-full flex-col justify-between gap-8 border-t border-white/20 pt-8 sm:flex-row">
+          
+          <div className="flex flex-col gap-2">
+             <span className="font-mono text-xs uppercase text-white/50">Socials</span>
+             <div className="flex gap-6">
+                {["LinkedIn", "GitHub", "Twitter"].map(link => (
+                    <a key={link} href="#" className="font-heading text-lg uppercase hover:line-through">{link}</a>
+                ))}
+             </div>
+          </div>
+
+          <div className="text-right">
+             <span className="block font-mono text-xs uppercase text-white/50 mb-2">Local Time</span>
+             <span className="font-heading text-2xl">
+                {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })} IST
+             </span>
+          </div>
+
+        </div>
+
       </div>
     </section>
-  );
+              );
 }
