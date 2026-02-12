@@ -80,7 +80,7 @@ export default function Contact({ profile }: { profile: any }) {
             </div>
 
             {/* Social links */}
-            <div className="flex gap-3">
+            <div className="flex gap-4">
               {socials.map((social, i) => (
                 <motion.a
                   key={social.label}
@@ -90,10 +90,20 @@ export default function Contact({ profile }: { profile: any }) {
                   initial={{ opacity: 0, y: 10 }}
                   animate={inView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.3 + i * 0.1 }}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--gold)]/10 text-[var(--ash)] transition-all hover:border-[var(--gold)]/40 hover:text-[var(--gold)]"
+                  whileHover={{ y: -5 }}
+                  className="group relative flex h-12 w-12 items-center justify-center perspective-1000"
                   aria-label={social.label}
                 >
-                  <social.icon size={16} />
+                  <div className="relative h-full w-full transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+                    {/* Front */}
+                    <div className="absolute inset-0 flex h-full w-full items-center justify-center rounded-full border border-[var(--gold)]/10 bg-[var(--carbon)] text-[var(--ash)] [backface-visibility:hidden]">
+                      <social.icon size={20} />
+                    </div>
+                    {/* Back */}
+                    <div className="absolute inset-0 flex h-full w-full items-center justify-center rounded-full border border-[var(--gold)] bg-[var(--gold)] text-[var(--carbon)] [backface-visibility:hidden] [transform:rotateY(180deg)]">
+                      <social.icon size={20} />
+                    </div>
+                  </div>
                 </motion.a>
               ))}
             </div>
@@ -105,58 +115,84 @@ export default function Contact({ profile }: { profile: any }) {
             initial={{ opacity: 0, x: 30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="glass rounded-2xl p-6"
+            className="glass rounded-2xl p-8"
           >
-            <div className="mb-4">
-              <label className="mb-1.5 block font-mono text-xs uppercase tracking-widest text-[var(--ash)]">
+            <div className="mb-6">
+              <label className="mb-2 block font-mono text-xs uppercase tracking-widest text-[var(--ash)]">
                 Name
               </label>
-              <input
-                type="text"
-                required
-                value={formState.name}
-                onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                className="w-full rounded-lg border border-[var(--gold)]/10 bg-[var(--carbon)] px-4 py-3 text-sm text-[var(--beige)] outline-none transition-colors focus:border-[var(--gold)]/40"
-                placeholder="Your name"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="mb-1.5 block font-mono text-xs uppercase tracking-widest text-[var(--ash)]">
-                Email
-              </label>
-              <input
-                type="email"
-                required
-                value={formState.email}
-                onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                className="w-full rounded-lg border border-[var(--gold)]/10 bg-[var(--carbon)] px-4 py-3 text-sm text-[var(--beige)] outline-none transition-colors focus:border-[var(--gold)]/40"
-                placeholder="your@email.com"
-              />
+              <div className="group relative">
+                <input
+                  type="text"
+                  required
+                  value={formState.name}
+                  onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                  className="w-full rounded-lg border border-[var(--gold)]/10 bg-[var(--carbon)] px-4 py-3 text-sm text-[var(--beige)] outline-none transition-all duration-300 focus:border-[var(--gold)] focus:shadow-[0_0_20px_rgba(244,208,63,0.1)] group-hover:border-[var(--gold)]/30"
+                  placeholder="Your name"
+                />
+                <div className="absolute bottom-0 left-0 h-[1px] w-0 bg-[var(--gold)] transition-all duration-300 group-focus-within:w-full" />
+              </div>
             </div>
             <div className="mb-6">
-              <label className="mb-1.5 block font-mono text-xs uppercase tracking-widest text-[var(--ash)]">
+              <label className="mb-2 block font-mono text-xs uppercase tracking-widest text-[var(--ash)]">
+                Email
+              </label>
+              <div className="group relative">
+                <input
+                  type="email"
+                  required
+                  value={formState.email}
+                  onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+                  className="w-full rounded-lg border border-[var(--gold)]/10 bg-[var(--carbon)] px-4 py-3 text-sm text-[var(--beige)] outline-none transition-all duration-300 focus:border-[var(--gold)] focus:shadow-[0_0_20px_rgba(244,208,63,0.1)] group-hover:border-[var(--gold)]/30"
+                  placeholder="your@email.com"
+                />
+                <div className="absolute bottom-0 left-0 h-[1px] w-0 bg-[var(--gold)] transition-all duration-300 group-focus-within:w-full" />
+              </div>
+            </div>
+            <div className="mb-8">
+              <label className="mb-2 block font-mono text-xs uppercase tracking-widest text-[var(--ash)]">
                 Message
               </label>
-              <textarea
-                required
-                rows={4}
-                value={formState.message}
-                onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                className="w-full resize-none rounded-lg border border-[var(--gold)]/10 bg-[var(--carbon)] px-4 py-3 text-sm text-[var(--beige)] outline-none transition-colors focus:border-[var(--gold)]/40"
-                placeholder="Tell me about your project..."
-              />
+              <div className="group relative">
+                <textarea
+                  required
+                  rows={4}
+                  value={formState.message}
+                  onChange={(e) => setFormState({ ...formState, message: e.target.value })}
+                  className="w-full resize-none rounded-lg border border-[var(--gold)]/10 bg-[var(--carbon)] px-4 py-3 text-sm text-[var(--beige)] outline-none transition-all duration-300 focus:border-[var(--gold)] focus:shadow-[0_0_20px_rgba(244,208,63,0.1)] group-hover:border-[var(--gold)]/30"
+                  placeholder="Tell me about your project..."
+                />
+                <div className="absolute bottom-0 left-0 h-[1px] w-0 bg-[var(--gold)] transition-all duration-300 group-focus-within:w-full" />
+              </div>
             </div>
             <button
               type="submit"
               disabled={submitted}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--gold)] px-6 py-3 font-mono text-xs uppercase tracking-widest text-[var(--carbon)] transition-all hover:shadow-[0_0_20px_rgba(201,169,110,0.2)] disabled:opacity-60"
+              className={`relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-lg px-6 py-4 font-mono text-xs uppercase tracking-widest transition-all duration-300 
+                ${submitted
+                  ? "bg-[var(--emerald)] text-white shadow-[0_0_20px_rgba(16,185,129,0.4)]"
+                  : "bg-[var(--gold)] text-[var(--carbon)] hover:shadow-[0_0_30px_rgba(244,208,63,0.4)] hover:scale-[1.02]"
+                } disabled:cursor-not-allowed`}
             >
-              {submitted ? (
-                "Message Sent!"
-              ) : (
-                <>
-                  Send Message <Send size={14} />
-                </>
+              <span className="relative z-10 flex items-center gap-2">
+                {submitted ? (
+                  <>
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                    >
+                      Message Sent!
+                    </motion.span>
+                  </>
+                ) : (
+                  <>
+                    Send Message <Send size={14} />
+                  </>
+                )}
+              </span>
+              {!submitted && (
+                <div className="absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-300 group-hover:translate-x-0" />
               )}
             </button>
           </motion.form>
