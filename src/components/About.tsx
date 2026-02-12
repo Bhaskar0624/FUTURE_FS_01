@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export default function About({ profile, journey }: { profile: any; journey: any[] }) {
   return (
-    <section id="about" className="relative min-h-screen w-full bg-black px-6 py-24 text-white">
+    <section id="about" className="relative min-h-screen w-full px-6 py-24 text-white">
 
       {/* HEADER */}
       <div className="mb-24 flex w-full items-end justify-between border-b border-white/20 pb-4">

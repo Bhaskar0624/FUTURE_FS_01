@@ -39,7 +39,7 @@ function ProjectCard({ project, index }: { project: any; index: number }) {
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
 
         return (
-        <section id="projects" className="relative min-h-screen w-full bg-black px-6 py-24 text-white">
+        <section id="projects" className="relative min-h-screen w-full px-6 py-24 text-white">
 
           {/* SECTION HEADER (Minimalist) */}
           <div className="mb-20 flex w-full items-end justify-between border-b border-white/20 pb-4">
@@ -60,7 +60,7 @@ function ProjectCard({ project, index }: { project: any; index: number }) {
                 viewport={{ once: true }}
                 onMouseEnter={() => setHoveredProject(index)}
                 onMouseLeave={() => setHoveredProject(null)}
-                className="group relative flex w-full cursor-pointer items-center justify-between border-b border-white/10 py-12 transition-colors hover:bg-white hover:text-black hover:px-6"
+                className="group relative flex w-full cursor-pointer items-center justify-between border-b border-white/10 py-12 transition-colors hover:bg-white/5 hover:text-white hover:px-6"
               >
                 {/* Project Title (Huge) */}
                 <h3 className="font-heading text-6xl font-normal uppercase leading-none tracking-tight sm:text-7xl md:text-8xl">

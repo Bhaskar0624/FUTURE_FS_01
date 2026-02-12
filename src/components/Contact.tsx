@@ -88,7 +88,7 @@ export default function Contact({ profile }: { profile: any }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   initial={{ opacity: 0, y: 10 }}
-    <section id="contact" className="relative h-screen w-full bg-black px-6 py-24 text-white">
+    <section id="contact" className="relative h-screen w-full px-6 py-24 text-white">
       
       {/* HEADER */}
       <div className="mb-12 flex w-full items-end justify-between border-b border-white/20 pb-4">
