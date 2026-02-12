@@ -43,24 +43,27 @@ varying float vElevation;
 uniform float uTime;
 
 void main() {
-  // COSMIC COLORS
+  // COSMIC COLORS - Defined with explicit floats
   vec3 deepBlue = vec3(0.0, 0.05, 0.2);
   vec3 cyan = vec3(0.0, 0.8, 0.9);
   vec3 violet = vec3(0.5, 0.0, 0.8);
+  vec3 white = vec3(1.0);
 
-  // Mix based on elevation
+  // Mix based on elevation (clamped for safety)
   float mixLevel = smoothstep(-0.2, 0.5, vElevation);
   
   // Base color
   vec3 baseColor = mix(deepBlue, cyan, mixLevel);
   
-  // Add violet highlights
-  baseColor = mix(baseColor, violet, sin(vElevation * 10.0 + uTime) * 0.5 + 0.5);
+  // Add violet highlights with time-based sine wave
+  float wave = sin(vElevation * 10.0 + uTime) * 0.5 + 0.5;
+  baseColor = mix(baseColor, violet, wave);
   
   // Add white sparkles/highlights
   float highlight = smoothstep(0.4, 0.5, vElevation);
-  baseColor += vec3(highlight);
+  baseColor = mix(baseColor, white, highlight);
 
+  // Ensure alpha is 1.0
   gl_FragColor = vec4(baseColor, 1.0);
 }
 `;
