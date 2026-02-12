@@ -1,10 +1,17 @@
 
 import { NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
 import { cookies } from "next/headers";
+import { createClient } from "@supabase/supabase-js";
+
+// Initialize Supabase Client with Service Role Key for backend operations
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
 export async function POST(request: Request) {
+    if (!supabaseUrl || !supabaseServiceKey) {
+        return NextResponse.json({ error: "Server Configuration Error: Missing Supabase Keys" }, { status: 500 });
+    }
+
     // 1. Check Authentication
     const cookieStore = await cookies();
     const session = cookieStore.get("admin_session");
@@ -17,28 +24,40 @@ export async function POST(request: Request) {
         const formData = await request.formData();
         const file = formData.get("file") as File;
 
-        // We don't strictly need the 'path' param anymore for local storage structure, 
-        // but we can use it to help name the file if we want, or just generate a unique name.
-        // Let's generate a unique name to prevent collisions.
-
         if (!file) {
             return NextResponse.json({ error: "No file provided" }, { status: 400 });
         }
 
-        const buffer = Buffer.from(await file.arrayBuffer());
-        const filename = file.name.replace(/\s/g, "_"); // Sanitize filename
-        const uniqueName = `${Date.now()}_${filename}`;
+        // Sanitize filename and create unique ID
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+        const filePath = `${fileName}`;
 
-        // Ensure upload directory exists
-        const uploadDir = path.join(process.cwd(), "public", "uploads");
-        await mkdir(uploadDir, { recursive: true });
+        const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-        // Write file
-        const filePath = path.join(uploadDir, uniqueName);
-        await writeFile(filePath, buffer);
+        // Convert file to ArrayBuffer for Supabase
+        const arrayBuffer = await file.arrayBuffer();
+        const fileBuffer = Buffer.from(arrayBuffer);
 
-        // Return public URL
-        const publicUrl = `/uploads/${uniqueName}`;
+        // Upload to Supabase Storage
+        const { data, error } = await supabase
+            .storage
+            .from('uploads')
+            .upload(filePath, fileBuffer, {
+                contentType: file.type,
+                upsert: false
+            });
+
+        if (error) {
+            console.error("Supabase Storage Error:", error);
+            throw new Error(error.message);
+        }
+
+        // Get Public URL
+        const { data: { publicUrl } } = supabase
+            .storage
+            .from('uploads')
+            .getPublicUrl(filePath);
 
         return NextResponse.json({ url: publicUrl });
     } catch (error: any) {
