@@ -100,7 +100,6 @@ function ProjectCard({ project, index }: { project: any; index: number }) {
         </div>
       </Atropos>
     </motion.div>
-    </motion.div >
   );
 }
 
